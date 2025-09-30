@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
+import Footer from "@/components/layout/Footer";
+import NavbarMinimal from "@/components/sections/NavbarMinimal";
+
+const display = Cormorant_Garamond({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-display" });
+const body = Inter({ subsets: ["latin"], variable: "--font-body" });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,9 +30,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${display.variable} ${body.variable} antialiased h-max`}
       >
+        <NavbarMinimal />
         {children}
+        <Footer />
       </body>
     </html>
   );
