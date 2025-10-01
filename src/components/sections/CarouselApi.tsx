@@ -61,9 +61,9 @@ export default function GalleryWithThumbs() {
             <div className="relative w-full lg:w-[740px] xl:w-[720px] shrink-0 overh" >
 
 
-                <Carousel setApi={setApi} className="w-full  h-[700px]">
+                <Carousel setApi={setApi} className="w-full  h-[670px]">
                     {/* Peek en móvil: cada item ocupa <100% */}
-                    <CarouselContent className="  h-[680px] md:h-[600] ">
+                    <CarouselContent className="  h-[650px] md:h-[600] ">
                         {STEPS_FROM_SERVICES.map((it) => (
                             <CarouselItem
                                 key={it.id}
@@ -103,7 +103,7 @@ export default function GalleryWithThumbs() {
                 )}
 
                 {/* Paginación por puntos */}
-                <div className="mt-3 flex justify-center gap-2">
+                <div className="flex justify-center gap-2">
                     {STEPS_FROM_SERVICES.map((_, i) => (
                         <button
                             key={`dot-${i}`}
