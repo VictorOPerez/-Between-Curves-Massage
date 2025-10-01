@@ -55,10 +55,10 @@ export default function Atmosphere({ items = DEFAULT_ITEMS }: { items?: Item[] }
                     className="font-display text-[32px] text-center sm:text-[34px] tracking-wide"
                     style={{ color: "var(--gold-soft)" }}
                 >
-                    ATMÓSFERA ENCANTADORA
+                    Elige tu masaje
                 </h2>
                 <p className="mt-2 text-white/75 text-[22px] text-center max-w-prose block py-3">
-                    Interiores cálidos y sensoriales para transportarte a un oasis de calma.
+                    60/90 min · Llegamos con todo · Resultados reales.
                 </p>
             </header>
             <GalleryWithThumbs />
