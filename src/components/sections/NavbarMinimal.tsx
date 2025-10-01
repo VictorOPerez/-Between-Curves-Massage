@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Home, Phone } from "lucide-react";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import LogoBCM from "../layout/LogoBCM";
 
 type Props = {
     logoSrc?: string;
@@ -33,24 +34,9 @@ export default function NavbarMinimal({
             >
                 <div className="h-14 flex items-center justify-between gap-3">
                     {/* Logo (izquierda) */}
-                    <Link href="/" className="flex items-center gap-2 shrink-0" aria-label="Inicio">
-                        <div className="relative h-8 w-28 ">
-                            {/* <Image
-                                src={logoSrc}
-                                alt={logoAlt}
-                                fill
-                                className="object-contain"
-                                sizes="(max-width:768px) 120px, 160px"
-                                priority
-                            /> */}
-                            <p className={clsx(
-                                "font-display tracking-wide leading-[1.05]",
-                                "text-[38px] sm:text-[42px] lg:text-[56px]"
-                            )} style={{ color: "var(--gold-soft)" }}>
-                                BCM
-                            </p>
-                        </div>
-                    </Link>
+
+                    <LogoBCM variant="wordmark" color="jade" size="lg" className="shrink-0" />
+
 
                     {/* Home centrado (solo icono) */}
                     <Link

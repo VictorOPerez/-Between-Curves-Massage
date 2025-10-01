@@ -29,27 +29,30 @@ export default function Hero() {
                     {/* CTAs (desktop) */}
                     <div className="hidden mt-6 md:flex flex-col sm:flex-row gap-3">
                         {/* Secundario — dorado */}
-                        <a
-                            href="#servicios"
-                            className="inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-medium
-                         ring-1 ring-[color:var(--gold-strong)]/30
-                         bg-[color:var(--gold-strong)]/15 hover:bg-[color:var(--gold-strong)]/25 transition"
+                        {/* <a href="/#servicios" className="inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-medium
+  ring-1 ring-[color:var(--gold-strong)]/30
+  bg-[color:var(--gold-strong)]/15 hover:bg-[color:var(--gold-strong)]/25 transition"
                             style={{ color: "var(--gold-strong)" }}
                         >
                             Ver servicios <span className="ml-2 inline-block">➜</span>
-                        </a>
+                        </a> */}
 
                         {/* Primario — ACENTO TURQUESA */}
                         <a
-                            href="#reserva"
+                            href={`https://wa.me/18133776678?text=${encodeURIComponent(
+                                "Hola 👋 Me gustaría reservar un masaje a domicilio."
+                            )}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-medium
-                         bg-[color:var(--accent2-500)] hover:bg-[color:var(--accent2-600)]
-                         text-black/90 transition
-                         ring-1 ring-[color:var(--accent2-400)]/45
-                         shadow-[0_12px_28px_-12px_color-mix(in_srgb,var(--accent2)_45%,transparent)]"
+             bg-[color:var(--accent2-500)] hover:bg-[color:var(--accent2-600)]
+             text-black/90 transition
+             ring-1 ring-[color:var(--accent2-400)]/45
+             shadow-[0_12px_28px_-12px_color-mix(in_srgb,var(--accent2)_45%,transparent)]"
                         >
                             Reservar cita
                         </a>
+
                     </div>
                 </div>
 
@@ -66,34 +69,37 @@ export default function Hero() {
                 </figure>
 
                 {/* CTA — abajo en móvil */}
-                <div className="px-6 block md:hidden order-3 lg:col-span-5 lg:col-start-1 lg:row-start-2 mt-4 mb-8">
+                <div className="px-6 block relative md:hidden order-3 lg:col-span-5 lg:col-start-1 lg:row-start-2 mt-4 mb-8 z-[999]">
                     <div className="flex items-start sm:flex-row sm:items-center gap-3">
                         {/* Secundario — dorado */}
-                        <a
-                            href="#servicios"
-                            className="inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-medium
-                         ring-1 ring-[color:var(--gold-strong)]/30
-                         bg-[color:var(--gold-strong)]/15 hover:bg-[color:var(--gold-strong)]/25 transition"
+                        {/* <a href="/#servicios" className="inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-medium
+  ring-1 ring-[color:var(--gold-strong)]/30
+  bg-[color:var(--gold-strong)]/15 hover:bg-[color:var(--gold-strong)]/25 transition"
                             style={{ color: "var(--gold-strong)" }}
                         >
                             Ver servicios <span className="ml-2 inline-block">➜</span>
-                        </a>
+                        </a> */}
+
 
                         {/* Primario — ACENTO TURQUESA */}
                         <a
-                            href="#reserva"
+                            href={`https://wa.me/18133776678?text=${encodeURIComponent(
+                                "Hola 👋 Me gustaría reservar un masaje a domicilio."
+                            )}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-medium
-                         bg-[color:var(--accent2-500)] hover:bg-[color:var(--accent2-600)]
-                         text-black/90 transition
-                         ring-1 ring-[color:var(--accent2-400)]/45
-                         shadow-[0_12px_28px_-12px_color-mix(in_srgb,var(--accent2)_45%,transparent)]"
+             bg-[color:var(--accent2-500)] hover:bg-[color:var(--accent2-600)]
+             text-black/90 transition
+             ring-1 ring-[color:var(--accent2-400)]/45
+             shadow-[0_12px_28px_-12px_color-mix(in_srgb,var(--accent2)_45%,transparent)]"
                         >
                             Reservar cita
                         </a>
+
                     </div>
                 </div>
             </div>
-
             {/* Badges móviles */}
             <TrustBadges className="block md:hidden" />
         </div>

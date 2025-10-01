@@ -12,10 +12,22 @@ type FinalCtaProps = {
     priceFrom?: string;
     bullet?: string;
     buttonLabel?: string;
-    buttonHref?: string;
+    buttonHref?: string;           // fallback si no se usa WhatsApp
     note?: string;
+    /** NUEVO: número de WhatsApp (con o sin +, espacios o guiones) */
+    whatsappPhone?: string;
+    /** NUEVO: texto que se prellenará en el chat */
+    whatsappText?: string;
     className?: string;
 };
+
+function toWaLink(phoneRaw: string, text?: string) {
+    // Deja solo dígitos (y posible + al inicio)
+    const phone = phoneRaw.trim().replace(/[^+\d]/g, "");
+    const base = `https://wa.me/${phone.replace(/^\+/, "")}`;
+    const query = text ? `?text=${encodeURIComponent(text)}` : "";
+    return `${base}${query}`;
+}
 
 export default function FinalCTA({
     title = "¿Listo para invertir en tu bienestar?",
@@ -24,11 +36,16 @@ export default function FinalCTA({
     minutes = "60 o 90",
     priceFrom = "70",
     bullet = "Evaluación postural, camilla y textiles incluidos, aromaterapia y recomendaciones de autocuidado.",
-    buttonLabel = "Reservar mi sesión",
+    buttonLabel = "Contactar por WhatsApp",
     buttonHref = "#reserva",
     note = "Cupos limitados por semana para asegurar la máxima calidad.",
+    whatsappPhone,                          // <-- pásalo para activar WhatsApp
+    whatsappText = "Hola, me gustaría reservar un masaje a domicilio.",
     className,
 }: FinalCtaProps) {
+    const useWhatsApp = Boolean(whatsappPhone);
+    const href = useWhatsApp ? toWaLink(whatsappPhone!, whatsappText) : buttonHref;
+
     return (
         <Section bleed bg="none" maxW="7xl" py="xl" className={className}>
             <header className="text-center mb-8">
@@ -66,10 +83,12 @@ export default function FinalCTA({
                         <p className="mt-3 text-white/70">{bullet}</p>
                     </div>
 
-                    {/* Botón principal (ACENTO TURQUESA) */}
+                    {/* Botón principal */}
                     <div className="md:text-right">
                         <Link
-                            href={buttonHref}
+                            href={href}
+                            target={useWhatsApp ? "_blank" : undefined}
+                            rel={useWhatsApp ? "noopener noreferrer" : undefined}
                             className={clsx(
                                 "inline-flex items-center justify-center rounded-full px-6 py-4",
                                 "font-medium transition",
@@ -77,6 +96,8 @@ export default function FinalCTA({
                                 "ring-1 ring-[color:var(--accent2-400)]/45",
                                 "shadow-[0_12px_28px_-12px_color-mix(in_srgb,var(--accent2)_45%,transparent)]"
                             )}
+                            aria-label={buttonLabel}
+                            title={buttonLabel}
                         >
                             {buttonLabel}
                             <span aria-hidden className="ml-2 text-lg">➜</span>

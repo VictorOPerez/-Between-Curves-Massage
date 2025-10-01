@@ -26,7 +26,10 @@ export default function Home() {
           <Program />
           <ThreeStepFlow />
           <Review />
-          <FinalCTA />
+          <FinalCTA
+            whatsappPhone="+18133776678"
+            whatsappText="Hola 👋 Quiero reservar una sesión de 90 min este viernes por la tarde. ¿Disponibilidad?"
+          />
         </Section>
       </div>
       <div className=" block md:hidden py-4">
@@ -39,7 +42,10 @@ export default function Home() {
         <Program />
         <ThreeStepFlow />
         <Review />
-        <FinalCTA />
+        <FinalCTA
+          whatsappPhone="+18133776678"
+          whatsappText="Hola 👋 Quiero reservar una sesión de 90 min este viernes por la tarde. ¿Disponibilidad?"
+        />
       </div> </div>
   );
 }

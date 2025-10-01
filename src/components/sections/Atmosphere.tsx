@@ -48,8 +48,7 @@ export default function Atmosphere({ items = DEFAULT_ITEMS }: { items?: Item[] }
 
     return (
 
-        <div className=" md:px-13 pb-20 px-5">
-
+        <section id="servicios" className=" md:px-13 pb-20 px-5">
 
             <header className=" flex justify-center flex-col items-center mb-10 " >
                 <h2
@@ -85,6 +84,6 @@ export default function Atmosphere({ items = DEFAULT_ITEMS }: { items?: Item[] }
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     );
 }

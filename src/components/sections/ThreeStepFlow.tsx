@@ -45,8 +45,6 @@ export default function ThreeStepFlow() {
                     "p-6 sm:p-10"
                 )}
             >
-
-
                 <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
                     {/* Línea de tiempo */}
                     <ol className="lg:col-span-6 relative">
@@ -61,7 +59,6 @@ export default function ThreeStepFlow() {
                                 Simple, cómodo y con el estándar MagiSpa.
                             </p>
                         </header>
-                        {/* línea vertical */}
 
                         <div className="space-y-7">
                             {STEPS.map((s, i) => (
@@ -89,23 +86,18 @@ export default function ThreeStepFlow() {
                         <div className="mt-8 flex gap-3">
                             {/* Botón primario — ACENTO TURQUESA */}
                             <a
-                                href="#reserva"
+                                href={`https://wa.me/18135551234?text=${encodeURIComponent(
+                                    "Hola 👋 Me gustaría reservar un masaje a domicilio."
+                                )}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="rounded-full px-5 py-3
                            bg-[color:var(--accent2-500)] hover:bg-[color:var(--accent2-600)]
                            text-black/90 transition
                            ring-1 ring-[color:var(--accent2-400)]/45
                            shadow-[0_10px_26px_-12px_color-mix(in_srgb,var(--accent2)_45%,transparent)]"
                             >
-                                Reservar ahora
-                            </a>
-                            {/* Secundario — mantiene dorado */}
-                            <a
-                                href="#servicios"
-                                className="rounded-full px-5 py-3 ring-1 ring-[color:var(--gold-strong)]/30
-                 bg-[color:var(--gold-strong)]/15 hover:bg-[color:var(--gold-strong)]/25"
-                                style={{ color: "var(--gold-strong)" }}
-                            >
-                                Ver servicios
+                                Contactar por WhatsApp
                             </a>
                         </div>
                     </ol>

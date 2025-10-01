@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${display.variable} ${body.variable} antialiased h-max`}
+        className={`${geistSans.variable} ${geistMono.variable} ${display.variable} ${body.variable} scroll-smooth antialiased h-max`}
       >
         <NavbarMinimal />
         {children}

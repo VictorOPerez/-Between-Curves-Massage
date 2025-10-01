@@ -74,7 +74,7 @@ export default function GalleryWithThumbs() {
                                         image={it.iconSrc}
                                         title={it.title}
                                         description={it.desc}
-                                        primaryHref="#reserva"
+                                        primaryHref="+18133776678"
                                         primaryLabel="Reservar ahora"
                                         secondaryHref="#servicios"
                                         secondaryLabel="Ver detalles"
