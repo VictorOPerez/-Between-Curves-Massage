@@ -53,51 +53,61 @@ export default function LogoBCM({
     label = "BCM — Between Curves Massage",
     className,
 }: LogoProps) {
-    const C = asLink ? Link : ("div" as any);
     const palette = colorClasses[color];
     const sizes = sizeMap[size];
 
+    const inner =
+        variant === "wordmark" ? (
+            <span
+                className={clsx(
+                    "font-logo font-serif tracking-wide leading-[1.02]",
+                    sizes.word,
+                    "bg-clip-text text-transparent",
+                    palette.text,
+                    withShadow && "drop-shadow-[0_6px_20px_rgba(0,0,0,0.35)]"
+                )}
+            >
+                BCM
+            </span>
+        ) : (
+            <span
+                className={clsx(
+                    "inline-flex items-center justify-center rounded-full",
+                    sizes.mono,
+                    palette.pill,
+                    "ring-1",
+                    palette.ring,
+                    withShadow && "shadow-[0_8px_24px_rgba(0,0,0,0.35)]"
+                )}
+                title="BCM"
+            >
+                <span
+                    className={clsx("font-logo font-serif", "bg-clip-text text-transparent", palette.text)}
+                    style={{ fontSize: "1em", lineHeight: 1 }}
+                >
+                    B
+                </span>
+            </span>
+        );
+
+    if (asLink) {
+        return (
+            <Link
+                href={href}
+                aria-label={label}
+                className={clsx("inline-flex items-center justify-center select-none", className)}
+            >
+                {inner}
+            </Link>
+        );
+    }
+
     return (
-        <C
-            href={asLink ? href : undefined}
+        <div
             aria-label={label}
             className={clsx("inline-flex items-center justify-center select-none", className)}
         >
-            {variant === "wordmark" ? (
-                <span
-                    className={clsx(
-                        "font-logo font-serif tracking-wide leading-[1.02]",
-                        sizes.word,
-                        "bg-clip-text text-transparent",
-                        palette.text,
-                        withShadow && "drop-shadow-[0_6px_20px_rgba(0,0,0,0.35)]"
-                    )}
-                >
-                    BCM
-                </span>
-            ) : (
-                <span
-                    className={clsx(
-                        "inline-flex items-center justify-center rounded-full",
-                        sizes.mono,
-                        palette.pill,
-                        "ring-1", palette.ring,
-                        withShadow && "shadow-[0_8px_24px_rgba(0,0,0,0.35)]"
-                    )}
-                    title="BCM"
-                >
-                    <span
-                        className={clsx(
-                            "font-logo font-serif",
-                            "bg-clip-text text-transparent",
-                            palette.text
-                        )}
-                        style={{ fontSize: "1em", lineHeight: 1 }}
-                    >
-                        B
-                    </span>
-                </span>
-            )}
-        </C>
+            {inner}
+        </div>
     );
 }
