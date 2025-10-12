@@ -6,9 +6,9 @@ type Item = {
 };
 
 const DEFAULT_ITEMS: Item[] = [
-    { icon: "shield", text: "Totalmente asegurado para tu tranquilidad" },
-    { icon: "medal", text: "4+ años de experiencia clínica" },
-    { icon: "shield-check", text: "Protocolos de higiene estrictos" },
+    { icon: "shield", text: "Fully insured for your peace of mind" },
+    { icon: "medal", text: "4+ years of clinical experience" },
+    { icon: "shield-check", text: "Strict hygiene protocols" },
 ];
 
 export default function TrustBadges({
@@ -21,9 +21,7 @@ export default function TrustBadges({
 }) {
     return (
         <div className={`w-full ${className ?? ""}`}>
-            <ul
-                className="px-0 grid grid-cols-2 md:grid-cols-3 gap-5 auto-rows-fr text-sm font-medium"
-            >
+            <ul className="px-0 grid grid-cols-2 md:grid-cols-3 gap-5 auto-rows-fr text-sm font-medium">
                 {items.map((item, i) => (
                     <li key={`${item.text}-${i}`} className={`${i === 2 ? "" : ""}` + "flex items-start gap-2"}>
                         <span

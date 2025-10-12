@@ -8,21 +8,21 @@ type FinalCtaProps = {
     title?: string;
     subtitle?: string;
     featuresTitle?: string;
-    minutes?: "60" | "90" | "60 o 90";
+    minutes?: "60" | "90" | "60 o 90" | "60 or 90";
     priceFrom?: string;
     bullet?: string;
     buttonLabel?: string;
-    buttonHref?: string;           // fallback si no se usa WhatsApp
+    buttonHref?: string;           // fallback if WhatsApp is not used
     note?: string;
-    /** NUEVO: número de WhatsApp (con o sin +, espacios o guiones) */
+    /** WhatsApp number (with or without +, spaces, or dashes) */
     whatsappPhone?: string;
-    /** NUEVO: texto que se prellenará en el chat */
+    /** Pre-filled message */
     whatsappText?: string;
     className?: string;
 };
 
 function toWaLink(phoneRaw: string, text?: string) {
-    // Deja solo dígitos (y posible + al inicio)
+    // Keep only digits (and optional leading +)
     const phone = phoneRaw.trim().replace(/[^+\d]/g, "");
     const base = `https://wa.me/${phone.replace(/^\+/, "")}`;
     const query = text ? `?text=${encodeURIComponent(text)}` : "";
@@ -30,17 +30,17 @@ function toWaLink(phoneRaw: string, text?: string) {
 }
 
 export default function FinalCTA({
-    title = "¿Listo para invertir en tu bienestar?",
-    subtitle = "Elige la sesión que mejor se adapte a ti. El alivio está a un clic.",
-    featuresTitle = "Nuestras recuperaciones terapéuticas incluyen",
-    minutes = "60 o 90",
+    title = "Ready to invest in your well-being?",
+    subtitle = "Choose the session that fits you best. Relief is one click away.",
+    featuresTitle = "Our therapeutic sessions include",
+    minutes = "60 or 90",
     priceFrom = "70",
-    bullet = "Evaluación postural, camilla y textiles incluidos, aromaterapia y recomendaciones de autocuidado.",
-    buttonLabel = "Contactar por WhatsApp",
-    buttonHref = "#reserva",
-    note = "Cupos limitados por semana para asegurar la máxima calidad.",
-    whatsappPhone,                          // <-- pásalo para activar WhatsApp
-    whatsappText = "Hola, me gustaría reservar un masaje a domicilio.",
+    bullet = "Postural assessment, massage table and linens included, aromatherapy, and self-care recommendations.",
+    buttonLabel = "Contact via WhatsApp",
+    buttonHref = "#booking",
+    note = "Limited spots per week to ensure maximum quality.",
+    whatsappPhone = "+1 (813) 377-6678",               // ✅ número que me diste
+    whatsappText = "Hi! I’d like to book an in-home massage.",
     className,
 }: FinalCtaProps) {
     const useWhatsApp = Boolean(whatsappPhone);
@@ -72,9 +72,9 @@ export default function FinalCTA({
                         </h3>
 
                         <p className="mt-3 text-white/80">
-                            <span className="text-white/90 font-medium">{minutes} minutos</span>
+                            <span className="text-white/90 font-medium">{minutes} minutes</span>
                             <span className="mx-2 text-white/30">·</span>
-                            Desde{" "}
+                            From{" "}
                             <span className="text-[color:var(--gold-strong)] font-semibold">
                                 ${priceFrom}
                             </span>
@@ -83,7 +83,7 @@ export default function FinalCTA({
                         <p className="mt-3 text-white/70">{bullet}</p>
                     </div>
 
-                    {/* Botón principal */}
+                    {/* Primary button */}
                     <div className="md:text-right">
                         <Link
                             href={href}

@@ -7,6 +7,13 @@
 :root {
   /* Texto base (por si usas variantes claras) */
   /* color base del pulgar (usa tu dorado) */
+  --brand-green-700: #1D4F47;
+  --gold-soft: #E8D19B;
+  --gold-strong: #DEBC86;
+  --accent2: #DEBC86;
+  --accent2-400: #E8D19B;
+  --accent2-500: #DEBC86;
+  --accent2-600: #C9A86A;
   /* existentes */
   --bg-deep-0: #0c0f14;
   --bg-deep-1: #0f1620;
@@ -146,22 +153,22 @@ body::before {
   position: fixed;
   inset: 0;
   z-index: -1;
-  /* detrás de todo */
   pointer-events: none;
 
-  /* TU FONDO, sin repetición y anclado al viewport */
+  /* Degradado de verdes + halos dorados sutiles */
   background:
-    radial-gradient(1200px 1200px at 120% -20%, rgba(201, 168, 106, .08), transparent 40%),
-    radial-gradient(800px 800px at -10% 110%, rgba(201, 168, 106, .06), transparent 55%),
-    radial-gradient(1400px 900px at 50% -20%, var(--bg-deep-2), transparent 60%),
-    linear-gradient(180deg, var(--bg-deep-1), var(--bg-deep-0));
+    /* halos dorados (muy suaves) */
+    radial-gradient(1100px 800px at 120% -10%, color-mix(in srgb, var(--gold-strong) 10%, transparent), transparent 55%),
+    radial-gradient(900px 700px at -10% 110%, color-mix(in srgb, var(--gold-strong) 8%, transparent), transparent 60%),
+    /* capa de volumen verde */
+    radial-gradient(1200px 900px at 50% -20%, color-mix(in oklab, var(--brand-green-650) 75%, transparent), transparent 65%),
+    /* base: verde → más profundo */
+    linear-gradient(180deg, var(--brand-green-650), var(--brand-green-750));
   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
-  /* tamaños grandes para evitar ‘seams’; ajusta si quieres */
   background-size: 140vw 140vh, 120vw 140vh, 160vw 120vh, 100% 100%;
   background-position: 120% -20%, -10% 110%, 50% -20%, 50% 50%;
 }
 
-/* Fallback por si algún navegador no soporta ::before fijo */
 @supports (background-attachment: fixed) {
   body::before {
     background-attachment: fixed, fixed, fixed, fixed;
@@ -174,10 +181,10 @@ body::before {
    <section class="bg-app">…</section>  */
 .bg-app {
   background:
-    radial-gradient(1200px 1200px at 120% -20%, rgba(201, 168, 106, .08), transparent 40%),
-    radial-gradient(800px 800px at -10% 110%, rgba(201, 168, 106, .06), transparent 55%),
-    radial-gradient(1400px 900px at 50% -20%, var(--bg-deep-2), transparent 60%),
-    linear-gradient(180deg, var(--bg-deep-1), var(--bg-deep-0));
+    radial-gradient(1100px 800px at 120% -10%, color-mix(in srgb, var(--gold-strong) 10%, transparent), transparent 55%),
+    radial-gradient(900px 700px at -10% 110%, color-mix(in srgb, var(--gold-strong) 8%, transparent), transparent 60%),
+    radial-gradient(1200px 900px at 50% -20%, color-mix(in oklab, var(--brand-green-650) 75%, transparent), transparent 65%),
+    linear-gradient(180deg, var(--brand-green-650), var(--brand-green-750));
 }
 
 /* Máscara curva placeholder para el hero (la refinamos luego con SVG) */
@@ -413,4 +420,21 @@ body::before {
 
 .thin-scroll::-webkit-scrollbar-corner {
   background: transparent;
+}
+
+:root {
+  /* BCM brand base */
+  --brand-green-700: #1D4F47;
+
+  /* Derivados para el degradado (no planos) */
+  --brand-green-750: color-mix(in oklab, var(--brand-green-700) 92%, black);
+  --brand-green-650: color-mix(in oklab, var(--brand-green-700) 85%, white);
+
+  /* Hace que bg-background (Tailwind) sea verde de marca en todo el sitio */
+  --background: var(--brand-green-700);
+}
+
+.dark {
+  /* En modo dark mantenemos el mismo fondo de marca */
+  --background: var(--brand-green-700);
 }

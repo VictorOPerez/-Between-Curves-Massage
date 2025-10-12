@@ -12,23 +12,20 @@ type Step = {
 
 const STEPS = [
     {
-        title: "Reserva en 2 minutos",
-        body:
-            "Elige servicio y horario. Confirmación instantánea, sin llamadas.",
+        title: "Book in 2 minutes",
+        body: "Choose your service and time. Instant confirmation—no calls.",
         icon: "calendar",
         image: "/images/steps/1.png",
     },
     {
-        title: "Llegamos con todo listo",
-        body:
-            "Camilla, textiles desechables, aromaterapia y música. Tú solo respira.",
+        title: "We arrive fully prepared",
+        body: "Table, disposable linens, aromatherapy, and music. You just breathe.",
         icon: "bag",
         image: "/images/steps/2.png",
     },
     {
-        title: "Renueva cuerpo y mente",
-        body:
-            "Resultados medibles: menos tensión, mejor sueño y energía estable.",
+        title: "Renew body and mind",
+        body: "Measurable results: less tension, better sleep, steady energy.",
         icon: "sparkles",
         image: "/images/steps/3.png",
     },
@@ -53,23 +50,23 @@ export default function ThreeStepFlow() {
                                 className="font-display text-[30px] sm:text-[48px] tracking-wide"
                                 style={{ color: "var(--gold-soft)" }}
                             >
-                                Tu Ritual en 3 Pasos
+                                Your 3-Step Ritual
                             </h2>
                             <p className="mt-2 text-white/75">
-                                Simple, cómodo y con el estándar MagiSpa.
+                                Simple, convenient, and up to MagiSpa standards.
                             </p>
                         </header>
 
                         <div className="space-y-7">
                             {STEPS.map((s, i) => (
                                 <li key={i} className="relative pl-16">
-                                    {/* medallón numerado — ACENTO TURQUESA */}
+                                    {/* medallón numerado — AZUL PASTEL */}
                                     <span
                                         className="absolute left-0 top-0 grid place-items-center
                     h-12 w-12 rounded-full
-                    ring-1 ring-[color:var(--accent2-400)]/45
-                    bg-[color:var(--accent2-500)]/14
-                    text-[color:var(--accent2-500)] z-20"
+                    ring-1 ring-[#AECBFF]/55
+                    bg-[#D7E7FF]/18
+                    text-[#AECBFF] z-20"
                                     >
                                         {i + 1}
                                     </span>
@@ -97,7 +94,7 @@ export default function ThreeStepFlow() {
                            ring-1 ring-[color:var(--accent2-400)]/45
                            shadow-[0_10px_26px_-12px_color-mix(in_srgb,var(--accent2)_45%,transparent)]"
                             >
-                                Contactar por WhatsApp
+                                Contact via WhatsApp
                             </a>
                         </div>
                     </ol>

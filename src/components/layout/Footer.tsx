@@ -5,14 +5,14 @@ import Link from "next/link";
 export default function Footer() {
     return (
         <footer className="mt-20">
-            {/* Card contenedor del footer */}
+            {/* Card container */}
             <div
                 className="
           mx-auto max-w-7xl rounded-[28px] ring-1 ring-white/10
           bg-white/[0.02] relative overflow-hidden
         "
             >
-                {/* brillo suave */}
+                {/* soft glow */}
                 <div
                     className="pointer-events-none absolute inset-0 opacity-40"
                     style={{
@@ -21,17 +21,17 @@ export default function Footer() {
                     }}
                 />
 
-                {/* línea superior */}
+                {/* top line */}
                 <div className="border-t border-white/10" />
 
-                {/* bloque central */}
+                {/* middle block */}
                 <div className="relative px-6 py-8 sm:px-8 lg:px-12">
-                    {/* logo centrado */}
+                    {/* centered logo */}
                     <div className="flex justify-center">
                         <LogoWordmark>Between Curves Massage</LogoWordmark>
                     </div>
 
-                    {/* Redes sociales (relleno) */}
+                    {/* Social */}
                     <div className="mt-6 flex justify-center gap-5 text-white/70">
                         <a
                             href="https://wa.me/18133776678"
@@ -66,14 +66,14 @@ export default function Footer() {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="hover:text-white/95 transition"
-                            aria-label="Ubicación"
-                            title="Ubicación"
+                            aria-label="Location"
+                            title="Location"
                         >
                             <PinIcon className="h-5 w-5" />
                         </a>
                     </div>
 
-                    {/* Datos de contacto y ubicación */}
+                    {/* Contact & location */}
                     <div className="mt-5 flex flex-col items-center gap-2 text-sm text-white/60">
                         <p>
                             WhatsApp:{" "}
@@ -111,16 +111,15 @@ export default function Footer() {
                         </p>
 
                         <p className="mt-2 text-center">
-                            Con base en <span className="text-white/80 font-medium">Tampa, FL</span>.{" "}
-                            Servicio a domicilio en Tampa, St. Petersburg, Clearwater y alrededores.
+                            Based in <span className="text-white/80 font-medium">Tampa, FL</span>.{" "}
+                            In-home service in Tampa, St. Petersburg, Clearwater, and surrounding areas.
                         </p>
-                        <p>Horario: Lun–Dom 9:00–20:00 (con cita previa)</p>
+                        <p>Hours: Mon–Sun 9:00–20:00 (by appointment)</p>
                     </div>
 
-                    {/* línea inferior + copyright */}
+                    {/* bottom line + copyright */}
                     <div className="mt-8 border-t border-white/10 pt-5 text-center text-xs text-white/45">
-                        © {new Date().getFullYear()} Between Curves Massage. Todos los derechos
-                        reservados.
+                        © {new Date().getFullYear()} Between Curves Massage. All rights reserved.
                     </div>
                 </div>
             </div>
@@ -128,7 +127,7 @@ export default function Footer() {
     );
 }
 
-/* ============ Wordmark simple (texto con dorado) ============ */
+/* ============ Wordmark ============ */
 function LogoWordmark({ children }: { children: React.ReactNode }) {
     return (
         <div
@@ -141,7 +140,7 @@ function LogoWordmark({ children }: { children: React.ReactNode }) {
     );
 }
 
-/* ============ Iconos inline (para no agregar dependencias) ============ */
+/* ============ Icons ============ */
 function WhatsAppIcon({ className = "" }: { className?: string }) {
     return (
         <svg viewBox="0 0 16 16" fill="currentColor" className={className} aria-hidden="true">

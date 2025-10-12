@@ -9,6 +9,7 @@ type Card = {
     quote: string;
     name: string;
     title: string;
+    avatar: string;           // 👉 NUEVO: ruta del avatar (ej. /images/review/mujer1.jpg)
 };
 
 export function InfiniteMovingCards({
@@ -29,7 +30,6 @@ export function InfiniteMovingCards({
     const [started, setStarted] = useState(false);
     const didClone = useRef(false);
 
-    // Duplica contenido una sola vez y fija --gap para un scroll sin saltos
     useEffect(() => {
         if (!containerRef.current || !scrollerRef.current || didClone.current) return;
 
@@ -37,7 +37,6 @@ export function InfiniteMovingCards({
         children.forEach((child) => scrollerRef.current!.appendChild(child.cloneNode(true)));
         didClone.current = true;
 
-        // lee el gap real que aplica Tailwind en el <ul>
         const cs = getComputedStyle(scrollerRef.current);
         const gap = (cs.columnGap || cs.gap || "1rem").toString();
         containerRef.current.style.setProperty("--gap", gap);
@@ -45,7 +44,6 @@ export function InfiniteMovingCards({
         setStarted(true);
     }, []);
 
-    // Actualiza dirección y velocidad cuando cambien props
     useEffect(() => {
         if (!containerRef.current) return;
 
@@ -53,9 +51,7 @@ export function InfiniteMovingCards({
             "--animation-direction",
             direction === "left" ? "forwards" : "reverse"
         );
-
-        const dur =
-            speed === "fast" ? "20s" : speed === "normal" ? "40s" : "80s";
+        const dur = speed === "fast" ? "20s" : speed === "normal" ? "40s" : "80s";
         containerRef.current.style.setProperty("--animation-duration", dur);
     }, [direction, speed]);
 
@@ -64,7 +60,6 @@ export function InfiniteMovingCards({
             ref={containerRef}
             className={cn(
                 "relative z-20 max-w-7xl overflow-hidden",
-                // máscara de desvanecido en bordes
                 "[mask-image:linear-gradient(to_right,transparent,white_18%,white_82%,transparent)]",
                 className
             )}
@@ -80,10 +75,17 @@ export function InfiniteMovingCards({
                 {items.map((item, idx) => (
                     <li
                         key={`${item.name}-${idx}`}
-                        className="relative h-[290px] w-[350px] flex-shrink-0 rounded-2xl border border-b-0 border-slate-700 px-8 py-6 md:w-[450px]"
+                        className="
+              relative h-[290px] w-[350px] md:w-[450px] flex-shrink-0
+              rounded-2xl
+              ring-1 ring-white/10
+              bg-white/[0.03] backdrop-blur-sm
+              shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_30px_100px_-40px_rgba(0,0,0,.65)]
+              px-8 py-6
+            "
                         style={{
                             background:
-                                "linear-gradient(180deg, var(--slate-800), var(--slate-900))",
+                                "linear-gradient(180deg, color-mix(in oklab, var(--bg-deep-2) 88%, black), color-mix(in oklab, var(--bg-deep-0) 92%, black))",
                         }}
                     >
                         <blockquote className="flex flex-col gap-5">
@@ -92,17 +94,17 @@ export function InfiniteMovingCards({
                                 className="pointer-events-none absolute -left-0.5 -top-0.5 z-[-1] h-[calc(100%_+_4px)] w-[calc(100%_+_4px)]"
                             />
                             <div className="flex gap-5">
-                                <div className="relative z-20 h-[80px] w-[80px] rounded-full bg-black">
+                                <div className="relative z-20 h-[80px] w-[80px] rounded-full bg-black overflow-hidden">
                                     <Image
-                                        src="/mujer.avif"
-                                        alt=""
+                                        src={item.avatar}        // 👉 usamos el avatar del item
+                                        alt={item.name}
                                         fill
                                         className="rounded-full object-cover"
                                     />
                                 </div>
                                 <div className="relative z-20 mt-6 flex flex-row items-center gap-4">
                                     <div className="flex flex-col gap-1">
-                                        <span className="text-sm font-normal leading-[1.6] text-gray-400">
+                                        <span className="text-sm font-normal leading-[1.6] text-gray-300">
                                             {item.name}
                                         </span>
                                         <Start num={5} size="sm" />
@@ -119,7 +121,7 @@ export function InfiniteMovingCards({
                                 <div className="flex gap-2">
                                     <a
                                         href="#"
-                                        className="text-sm font-normal leading-[1.6] text-gray-400"
+                                        className="text-sm font-normal leading-[1.6] text-gray-300 hover:text-white/90 transition"
                                     >
                                         Read full review
                                     </a>

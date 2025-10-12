@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { InfiniteMovingCards } from "../ui/infinite-moving-cards";
 import Start from "../ui/Start";
@@ -8,58 +8,66 @@ import Start from "../ui/Start";
 const testimonials = [
     {
         quote:
-            "It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of Darkness, it was the spring of hope, it was the winter of despair.",
-        name: "Charles Dickens",
-        title: "A Tale of Two Cities",
+            "Booked a 90-minute deep tissue and they arrived on time with the table and fresh linens. Neck and shoulder knots finally released—I slept like a baby.",
+        name: "Emily R.",
+        title: "Deep Tissue · Tampa",
+        avatar: "/images/review/mujer1.jpg",
     },
     {
         quote:
-            "To be, or not to be, that is the question: Whether 'tis nobler in the mind to suffer The slings and arrows of outrageous fortune, Or to take Arms against a Sea of troubles, And by opposing end them: to die, to sleep.",
-        name: "William Shakespeare",
-        title: "Hamlet",
-    },
-    {
-        quote: "All that we see or seem is but a dream within a dream.",
-        name: "Edgar Allan Poe",
-        title: "A Dream Within a Dream",
+            "Professional, sanitized setup at home: disposable textiles, aromatherapy, and relaxing music. My back pain eased within minutes.",
+        name: "Carlos M.",
+        title: "In-Home Swedish Massage",
+        avatar: "/images/review/hombre1.jpg",
     },
     {
         quote:
-            "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.",
-        name: "Jane Austen",
-        title: "Pride and Prejudice",
+            "Hot stones + gentle Swedish melted away a week of stress. The room felt like a spa and the therapist explained every step.",
+        name: "Jasmine T.",
+        title: "Hot Stone Combo",
+        avatar: "/images/review/mujer2.jpg",
     },
     {
         quote:
-            "Call me Ishmael. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would sail about a little and see the watery part of the world.",
-        name: "Herman Melville",
-        title: "Moby-Dick",
+            "Cupping released tight calves from running—better range of motion the next day. Super respectful and fully insured.",
+        name: "Derrick S.",
+        title: "Cupping Therapy",
+        avatar: "/images/review/hombre4.jpg",
+    },
+    {
+        quote:
+            "Prenatal massage done safely with supportive pillows and side-lying positions. Lower-back tension reduced immediately.",
+        name: "Alicia G.",
+        title: "Prenatal · At Home",
+        avatar: "/images/review/mujer1.jpg", // reutilizamos mujer1
     },
 ];
 
 const Review = () => {
     return (
-        <div className=" mt-10 mb-20  h-[40rem] rounded-md flex flex-col gap-20 antialiased items-center justify-center relative overflow-hidden">
-            <div className=" flex flex-col gap-5 px-5">
-                <h3 className="  text-4xl text-center  font-semibold text-white">What our customers are saying</h3>
-                <div className=" text-xl leading-[1.6] text-center text-gray-400 font-normal flex flex-col gap-2 ">
+        <div
+            className="
+        mt-10 mb-20 h-[40rem] rounded-3xl flex flex-col gap-20 antialiased items-center justify-center relative overflow-hidden
+        bg-[radial-gradient(120%_120%_at_80%_-20%,rgba(0,0,0,0.35),transparent_55%),linear-gradient(180deg,rgba(0,0,0,0.35),rgba(0,0,0,0.20))]
+        ring-1 ring-white/10 backdrop-blur-sm p-6
+      "
+        >
+            <div className="flex flex-col gap-5 px-5">
+                <h3 className="text-4xl text-center font-semibold text-white">
+                    What our clients are saying
+                </h3>
+                <div className="text-xl leading-[1.6] text-center text-gray-300 font-normal flex flex-col gap-2">
                     <span>
                         <strong>5.0</strong> BETWEEN CURVES MASSAGE
                     </span>
-
                     <div className="flex gap-2 justify-center">
-                        <div>
-                            <Image src="/images/icons/google.png" alt="" width={30} height={30} />
-                        </div>
-                        <Start num={5} size={"xl"} />
+                        <Image src="/images/icons/google.png" alt="Google" width={30} height={30} />
+                        <Start num={5} size="xl" />
                     </div>
                 </div>
             </div>
-            <InfiniteMovingCards
-                items={testimonials}
-                direction="right"
-                speed="slow"
-            />
+
+            <InfiniteMovingCards items={testimonials} direction="right" speed="slow" />
         </div>
     );
 };

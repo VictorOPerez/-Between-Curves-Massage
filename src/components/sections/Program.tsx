@@ -6,8 +6,8 @@ import Section from "../ui/Section";
 type Step = {
     id: number;
     iconSrc: string;
-    label: string;       // texto bajo el círculo de la línea
-    title: string;       // título del bloque
+    label: string;       // text under the circle in the line
+    title: string;       // block title
     desc: string;
 };
 
@@ -15,49 +15,49 @@ const STEPS: Step[] = [
     {
         id: 1,
         iconSrc: "/images/programa/1.png",
-        label: "Rehidrata y come ligero",
-        title: "Rehidrata y come ligero",
+        label: "Rehydrate and eat light",
+        title: "Rehydrate and Eat Light",
         desc:
-            "Agua y frutas/verduras hidratan el tejido y ayudan a eliminar residuos metabólicos.",
+            "Water and fruits/vegetables hydrate tissues and help clear metabolic waste.",
     },
     {
         id: 2,
         iconSrc: "/images/programa/2.png",
-        label: "Calor local 10–15 min",
-        title: "Calor local 10–15 min",
+        label: "Local heat 10–15 min",
+        title: "Local Heat (10–15 min)",
         desc:
-            "Compresa tibia en zona tensa para prolongar el efecto del masaje. Evita calor si hay inflamación aguda.",
+            "Warm compress on the tense area to prolong the massage effect. Avoid heat if there’s acute inflammation.",
     },
     {
         id: 3,
         iconSrc: "/images/programa/3.png",
-        label: "Estiramientos suaves",
-        title: "Estiramientos suaves",
+        label: "Gentle stretches",
+        title: "Gentle Stretches",
         desc:
-            "Movimientos lentos, sin rebotes. 2–3 repeticiones por zona con respiración profunda.",
+            "Slow movements, no bouncing. 2–3 repetitions per area with deep breathing.",
     },
     {
         id: 4,
         iconSrc: "/images/programa/4.png",
-        label: "Señales a vigilar",
-        title: "Señales a vigilar",
+        label: "Signs to watch",
+        title: "Signs to Watch",
         desc:
-            "Cada cuerpo responde de forma única. Date tiempo para descansar y notar los efectos positivos a lo largo del día.",
+            "Every body responds uniquely. Give yourself time to rest and notice the positive effects throughout the day.",
     },
 ];
 
 export default function Program() {
     return (
         <div className="px-4 md:px-20 pb-20 ">
-            {/* Título */}
+            {/* Title */}
             <h2
                 className="font-display text-center text-[28px] sm:text-[32px] tracking-[0.08em]"
                 style={{ color: "var(--gold-soft)" }}
             >
-                Cuidado post-masaje
+                Post-Massage Care
             </h2>
 
-            {/* Timeline con círculos */}
+            {/* Timeline with circles */}
             <div className="relative mt-8">
                 <div className="absolute left-0 right-0 top-10 h-px bg-white/10" />
                 <ul className="grid grid-cols-2 sm:grid-cols-4 gap-6">
@@ -65,13 +65,13 @@ export default function Program() {
                         <li key={s.id} className="flex flex-col items-center text-center">
                             <div className="relative h-40 w-40 sm:h-24 sm:w-24 rounded-full overflow-hidden ring-1 ring-white/15 bg-white/5 backdrop-blur-sm">
                                 <Image src={s.iconSrc} alt="" fill className="object-cover" sizes="96px" />
-                                {/* badge numérico */}
+                                {/* numeric badge (blue accent) */}
                                 <span
-                                    className="absolute -top-2 -right-2 h-7 w-7 grid place-items-center rounded-full text-[12px] font-semibold 
-                             ring-1 ring-[color:var(--gold-strong)]/40"
+                                    className="absolute -top-2 -right-2 h-7 w-7 grid place-items-center rounded-full text-[12px] font-semibold
+                             ring-1 ring-[#AECBFF]/55"
                                     style={{
-                                        color: "var(--gold-strong)",
-                                        backgroundColor: "color-mix(in oklab, var(--gold-strong) 18%, transparent)",
+                                        color: "#AECBFF",
+                                        backgroundColor: "color-mix(in oklab, #AECBFF 18%, transparent)",
                                     }}
                                 >
                                     {s.id}
@@ -83,21 +83,21 @@ export default function Program() {
                 </ul>
             </div>
 
-            {/* Detalles de pasos (2 columnas) */}
+            {/* Step details (2 columns) */}
             <div className="mt-10 grid gap-8 md:grid-cols-2">
                 {STEPS.map((s) => (
                     <article key={`card-${s.id}`} className="relative">
-                        {/* número fantasma */}
+                        {/* ghost number (blue accent) */}
                         <span
                             className="pointer-events-none absolute -top-6 -left-2 select-none font-display font-semibold
                          text-[120px] sm:text-[140px] leading-none"
-                            style={{ color: "rgba(201,168,106,0.10)" }} // dorado muy tenue
+                            style={{ color: "rgba(174,203,255,0.22)" }} // pastel blue, subtle
                             aria-hidden="true"
                         >
                             {s.id}
                         </span>
 
-                        <div className="relative rounded-2xl p-5 sm:p-6 bg-white/[0.02] ">
+                        <div className="relative rounded-2xl p-5 sm:p-6 bg-white/[0.02] ring-1 ring-[#AECBFF]/55 shadow-[0_20px_80px_-40px_rgba(79,133,210,0.45)]">
                             <h3
                                 className="font-semibold text-white/95"
                                 style={{ color: "var(--gold-soft)" }}
@@ -109,8 +109,6 @@ export default function Program() {
                     </article>
                 ))}
             </div>
-
-
         </div>
     );
 }

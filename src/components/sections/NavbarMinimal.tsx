@@ -11,7 +11,7 @@ import LogoBCM from "../layout/LogoBCM";
 type Props = {
     logoSrc?: string;
     logoAlt?: string;
-    contactHref?: string;   // ej: "#contacto" o WhatsApp: "https://wa.me/1XXXXXXXXXX"
+    contactHref?: string;
 };
 
 export default function NavbarMinimal({
@@ -32,11 +32,24 @@ export default function NavbarMinimal({
         "
                 aria-label="Main"
             >
-                <div className="h-14 flex items-center justify-between gap-3">
-                    {/* Logo (izquierda) */}
-
-                    <LogoBCM variant="wordmark" color="jade" size="lg" className="shrink-0" />
-
+                <div className="h-16 flex items-center justify-between gap-3">
+                    {/* Logo + nombre integrado */}
+                    <div className="flex items-center gap-2 sm:gap-3">
+                        <LogoBCM variant="wordmark" color="gold" size="lg" className="shrink-0" />
+                        <span
+                            className={clsx(
+                                "font-logo tracking-[0.04em] leading-none",
+                                "text-[18px] sm:text-[20px] md:text-[22px]",
+                                // mismo degradado dorado que el logo
+                                "bg-clip-text text-transparent",
+                                "bg-gradient-to-br from-[#E9D8A6] via-[#D4B26A] to-[#A6812A]",
+                                // sutil sombra para legibilidad sobre fondos oscuros
+                                "drop-shadow-[0_4px_14px_rgba(0,0,0,0.35)]"
+                            )}
+                        >
+                            Between Curves <span className="hidden sm:inline">Massage</span>
+                        </span>
+                    </div>
 
                     {/* Home centrado (solo icono) */}
                     <Link

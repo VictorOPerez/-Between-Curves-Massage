@@ -6,50 +6,50 @@ import Link from "next/link";
 export default function ContactPage() {
     return (
         <main className="mt-10">
-            {/* Hero minimal y ligero */}
+            {/* Light, minimal hero */}
             <Section bleed bg="none" maxW="7xl" py="xl">
                 <header className="text-center">
-                    <p className="text-sm text-white/50">Estamos para ayudarte</p>
+                    <p className="text-sm text-white/50">We’re here to help</p>
                     <h1
                         className="font-display text-[34px] sm:text-[44px] leading-tight mt-2"
                         style={{ color: "var(--gold-soft)" }}
                     >
-                        Contacto
+                        Contact
                     </h1>
                     <p className="text-white/70 max-w-2xl mx-auto mt-3">
-                        Resolvemos consultas, coordinamos agendas y te asesoramos según tus objetivos.
+                        We answer questions, coordinate schedules, and advise you based on your goals.
                     </p>
 
-                    {/* chips de info rápida */}
+                    {/* quick info chips */}
                     <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
                         <span className="rounded-full px-3 py-1 text-sm ring-1 ring-white/10 bg-white/5 text-white/80">
-                            Respuesta &lt; 24h
+                            Reply &lt; 24h
                         </span>
                         <span className="rounded-full px-3 py-1 text-sm ring-1 ring-white/10 bg-white/5 text-white/80">
-                            WhatsApp y llamada
+                            WhatsApp & phone call
                         </span>
                         <span className="rounded-full px-3 py-1 text-sm ring-1 ring-white/10 bg-white/5 text-white/80">
-                            Horario: Lun–Dom 7:30AM–8:00pm
+                            Hours: Mon–Sun 7:30 AM–8:00 PM
                         </span>
                     </div>
                 </header>
             </Section>
 
-            {/* Formulario + acciones (mailto, wa.me, tel) */}
+            {/* Form + actions (mailto, wa.me, tel) */}
             <ContactSection
                 toEmail="hola@magispa.com"
-                whatsappPhone="+34600000000"
-                callPhone="+34600000000"
+                whatsappPhone="+1 (813) 377-6678"   // ✅ tu número
+                callPhone="+1 (813) 377-6678"       // ✅ tu número
                 className="mt-2"
             />
 
-            {/* FAQ ligera (opcional) */}
+            {/* Lightweight FAQ (optional) */}
             <Section bleed bg="none" maxW="7xl" py="lg">
                 <div className="grid gap-6 md:grid-cols-2">
-                    <FaqItem q="¿Puedo pagar en efectivo o tarjeta?" a="Sí, aceptamos ambos métodos." />
-                    <FaqItem q="¿Atienden a domicilio?" a="Sí, llevamos camilla y todo el material necesario." />
-                    <FaqItem q="¿Con cuánta antelación reservo?" a="Idealmente 24–48h. Para hoy, escríbenos por WhatsApp." />
-                    <FaqItem q="¿Qué servicios recomiendan para dolor cervical?" a="Suele funcionar masaje terapéutico de 60–90min. Te guiamos por WhatsApp." />
+                    <FaqItem q="Can I pay in cash or by card?" a="Yes, we accept both methods." />
+                    <FaqItem q="Do you offer in-home service?" a="Yes, we bring the table and all necessary materials." />
+                    <FaqItem q="How far in advance should I book?" a="Ideally 24–48h. For same-day, message us on WhatsApp." />
+                    <FaqItem q="What do you recommend for neck pain?" a="A 60–90 min therapeutic massage usually works well. We’ll guide you on WhatsApp." />
                 </div>
             </Section>
         </main>
