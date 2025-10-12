@@ -84,7 +84,7 @@ export default function AccentCard({
                         )}
                         aria-label={`Contactar — ${title}`}
                     >
-                        reservar
+                        Book appointment
                         {/* Icono WhatsApp */}
                         <svg
                             aria-hidden="true"
