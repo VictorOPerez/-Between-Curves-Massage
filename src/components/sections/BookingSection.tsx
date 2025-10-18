@@ -82,21 +82,18 @@ export default function ContactSection({
                 composeSubject={({ service, location }) =>
                     `Booking request${service ? `: ${service}` : ""}${location ? ` — ${location}` : ""}`
                 }
-
-                /* 🎨 Inputs: fondo transparente + borde claro + focus dorado */
                 inputCls="
+    theme-select
     w-full rounded-xl
     bg-transparent text-white/90
     placeholder-white/55
     border border-white/20 ring-1 ring-white/10
     px-3 py-3
-    shadow-none
     focus:outline-none focus:ring-2 focus:ring-[#c9a86a]/45 focus:border-[#c9a86a]/50
   "
-
-                /* Botón dorado (igual que antes) */
                 gradient="linear-gradient(180deg,#c9a86a,#a8864a)"
             />
+
 
 
         </Section>

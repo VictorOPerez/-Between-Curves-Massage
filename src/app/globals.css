@@ -438,3 +438,35 @@ body::before {
   /* En modo dark mantenemos el mismo fondo de marca */
   --background: var(--brand-green-700);
 }
+
+/* ===== Theme para selects nativos (BCM) ===== */
+.theme-select {
+  background-color: transparent;
+  color: #eef4f2;
+  /* texto del select cerrado */
+}
+
+/* Fondo y texto de las filas del dropdown */
+.theme-select option {
+  background-color: #12322d;
+  /* verde oscuro del sitio */
+  color: #eef4f2;
+  /* texto claro */
+}
+
+/* Opción seleccionada (resalta) */
+.theme-select option:checked {
+  background-color: #0f2f2b !important;
+  color: #ffffff !important;
+}
+
+/* (Opcional) Grupos con color dorado suave */
+.theme-select optgroup {
+  background-color: #12322d;
+  color: #c9a86a;
+}
+
+/* (Opcional) oculta la flecha vieja en IE/Edge legacy */
+select.theme-select::-ms-expand {
+  display: none;
+}
