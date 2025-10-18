@@ -15,9 +15,9 @@ const testimonials = [
     },
     {
         quote:
-            "Professional, sanitized setup at home: disposable textiles, aromatherapy, and relaxing music. My back pain eased within minutes.",
+            "Professional, sanitized setup studio session: disposable textiles, aromatherapy, and relaxing music. My back pain eased within minutes.",
         name: "Carlos M.",
-        title: "In-Home Swedish Massage",
+        title: "Session Swedish Massage",
         avatar: "/images/review/hombre1.jpg",
     },
     {

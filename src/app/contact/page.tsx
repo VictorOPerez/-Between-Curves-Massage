@@ -14,7 +14,7 @@ export default function ContactPage() {
                         className="font-display text-[34px] sm:text-[44px] leading-tight mt-2"
                         style={{ color: "var(--gold-soft)" }}
                     >
-                        Contact
+                        Contact & Location
                     </h1>
                     <p className="text-white/70 max-w-2xl mx-auto mt-3">
                         We answer questions, coordinate schedules, and advise you based on your goals.
@@ -32,6 +32,30 @@ export default function ContactPage() {
                             Hours: Mon–Sun 7:30 AM–8:00 PM
                         </span>
                     </div>
+
+                    {/* address + directions (just text, before the form) */}
+                    <p className="text-white/70 max-w-2xl mx-auto mt-4">
+                        <span className="text-white/80 font-medium">Studio address:</span>{" "}
+                        <a
+                            href="https://maps.google.com/?q=4311%20W%20Waters%20Ave,%20Tampa,%20FL"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-semibold"
+                            style={{ color: "var(--gold-strong)" }}
+                        >
+                            4311 W Waters Ave, Tampa, FL
+                        </a>{" "}
+                        —{" "}
+                        <a
+                            href="https://maps.google.com/?q=4311%20W%20Waters%20Ave,%20Tampa,%20FL"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-semibold underline-offset-2 hover:underline"
+                            style={{ color: "var(--gold-strong)" }}
+                        >
+                            Get Directions / Cómo llegar
+                        </a>
+                    </p>
                 </header>
             </Section>
 

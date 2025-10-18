@@ -30,17 +30,17 @@ function toWaLink(phoneRaw: string, text?: string) {
 }
 
 export default function FinalCTA({
-    title = "Ready to invest in your well-being?",
-    subtitle = "Choose the session that fits you best. Relief is one click away.",
+    title = "Book in-studio or in-home",
+    subtitle = "Choose the option that fits you best. Relief is one click away.",
     featuresTitle = "Our therapeutic sessions include",
     minutes = "60 or 90",
     priceFrom = "70",
     bullet = "Postural assessment, massage table and linens included, aromatherapy, and self-care recommendations.",
-    buttonLabel = "Contact via WhatsApp",
+    buttonLabel = "Book now",
     buttonHref = "#booking",
-    note = "Limited spots per week to ensure maximum quality.",
-    whatsappPhone = "+1 (813) 377-6678",               // ✅ número que me diste
-    whatsappText = "Hi! I’d like to book an in-home massage.",
+    note = "Studio: 4311 W Waters Ave, Tampa, FL — Free parking (if available).",
+    whatsappPhone = "+1 (813) 377-6678",
+    whatsappText = "Hi! I’d like to book a session (studio or in-home).",
     className,
 }: FinalCtaProps) {
     const useWhatsApp = Boolean(whatsappPhone);
@@ -105,8 +105,6 @@ export default function FinalCTA({
                     </div>
                 </div>
             </div>
-
-            <p className="mt-6 text-center text-sm text-white/55">{note}</p>
         </Section>
     );
 }

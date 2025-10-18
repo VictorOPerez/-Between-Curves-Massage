@@ -62,7 +62,7 @@ export default function Footer() {
                             <MailIcon className="h-5 w-5" />
                         </a>
                         <a
-                            href="https://maps.google.com/?q=Tampa,FL"
+                            href="https://maps.google.com/?q=4311%20W%20Waters%20Ave,%20Tampa,%20FL"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="hover:text-white/95 transition"
@@ -111,8 +111,19 @@ export default function Footer() {
                         </p>
 
                         <p className="mt-2 text-center">
-                            Based in <span className="text-white/80 font-medium">Tampa, FL</span>.{" "}
-                            In-home service in Tampa, St. Petersburg, Clearwater, and surrounding areas.
+                            <span className="text-white/80 font-medium">Studio in Tampa</span> (address below) + in-home in Tampa Bay.
+                        </p>
+                        <p className="text-center">
+                            Address:{" "}
+                            <a
+                                href="https://maps.google.com/?q=4311%20W%20Waters%20Ave,%20Tampa,%20FL"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-semibold"
+                                style={{ color: "var(--gold-strong)" }}
+                            >
+                                4311 W Waters Ave, Tampa, FL
+                            </a>
                         </p>
                         <p>Hours: Mon–Sun 9:00–20:00 (by appointment)</p>
                     </div>

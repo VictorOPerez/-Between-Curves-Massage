@@ -18,7 +18,7 @@ const STEPS = [
         image: "/images/steps/1.png",
     },
     {
-        title: "We arrive fully prepared",
+        title: "Everything ready at the studio or on-site",
         body: "Table, disposable linens, aromatherapy, and music. You just breathe.",
         icon: "bag",
         image: "/images/steps/2.png",

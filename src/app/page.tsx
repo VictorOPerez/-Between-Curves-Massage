@@ -2,6 +2,7 @@ import Atmosphere from "@/components/sections/Atmosphere";
 import BookingSection from "@/components/sections/BookingSection";
 import FinalCTA from "@/components/sections/FinalCTA";
 import Hero from "@/components/sections/Hero";
+import MapDirectionsSection from "@/components/sections/MapDirectionsSection";
 import Program from "@/components/sections/Program";
 import PromoMeditation from "@/components/sections/PromoMeditation";
 import Review from "@/components/sections/Review";
@@ -30,6 +31,7 @@ export default function Home() {
             whatsappPhone="+18133776678"
             whatsappText="Hola 👋 Quiero reservar una sesión de 90 min este viernes por la tarde. ¿Disponibilidad?"
           />
+          <MapDirectionsSection />
         </Section>
       </div>
       <div className=" block md:hidden py-4">
@@ -46,6 +48,7 @@ export default function Home() {
           whatsappPhone="+18133776678"
           whatsappText="Hola 👋 Quiero reservar una sesión de 90 min este viernes por la tarde. ¿Disponibilidad?"
         />
+        <MapDirectionsSection />
       </div> </div>
   );
 }

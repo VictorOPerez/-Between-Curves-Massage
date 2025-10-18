@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Between Curves Massage",
-  description: "Professional in-home massage in Tampa",
+  description: "Massage studio in Tampa + in-home service",
   icons: {
     icon: [
       { url: "/favicon.ico" },

@@ -19,12 +19,12 @@ export default function Hero() {
                         )}
                         style={{ color: "var(--gold-soft)" }}
                     >
-                        Professional in-home massage <br className="hidden sm:block" />
-                        in Tampa
+                        Massage studio in Tampa  <br className="hidden sm:block" />
+                        (also in-home)
                     </h1>
 
                     <p className="mt-4 text-white/70 max-w-prose">
-                        We bring the spa to your home. Clinical and sensory techniques to
+                        Visit our studio or book an in-home session. Clinical and sensory techniques to
                         relieve pain, release stress, and sleep better. You just breathe; we
                         handle everything: table, sheets, and aromatherapy.
                     </p>

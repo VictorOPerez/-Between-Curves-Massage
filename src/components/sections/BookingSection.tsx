@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Section from "../ui/Section";
 import clsx from "clsx";
+import UniversalEmailJSForm from "./UniversalEmailJSForm";
 
 type ContactSectionProps = {
     /** Destination email for mailto */
@@ -75,105 +76,29 @@ export default function ContactSection({
             <p className="text-center text-white/70 mb-8">
                 We answer questions and coordinate your session through the channel you prefer.
             </p>
+            <UniversalEmailJSForm
+                locale="en"
+                serviceOptions={["60-min massage", "90-min massage", "Couples", "In-home", "In-studio"]}
+                composeSubject={({ service, location }) =>
+                    `Booking request${service ? `: ${service}` : ""}${location ? ` — ${location}` : ""}`
+                }
 
-            <form onSubmit={onSubmit} className="grid gap-8 lg:grid-cols-12">
-                {/* Inputs */}
-                <div className="lg:col-span-6 space-y-5 px-2 sm:px-4">
-                    <Field label="Name">
-                        <input
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                            placeholder="Your name"
-                            className="w-full bg-transparent outline-none border-b border-white/10 focus:border-[color:var(--accent2-400)] py-3 text-white/90"
-                        />
-                    </Field>
+                /* 🎨 Inputs: fondo transparente + borde claro + focus dorado */
+                inputCls="
+    w-full rounded-xl
+    bg-transparent text-white/90
+    placeholder-white/55
+    border border-white/20 ring-1 ring-white/10
+    px-3 py-3
+    shadow-none
+    focus:outline-none focus:ring-2 focus:ring-[#c9a86a]/45 focus:border-[#c9a86a]/50
+  "
 
-                    <Field label="Email">
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                            placeholder="contact@betweencurvesmassage.com"
-                            className="w-full bg-transparent outline-none border-b border-white/10 focus:border-[color:var(--accent2-400)] py-3 text-white/90"
-                        />
-                    </Field>
+                /* Botón dorado (igual que antes) */
+                gradient="linear-gradient(180deg,#c9a86a,#a8864a)"
+            />
 
-                    <Field label="Phone (optional)">
-                        <input
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            placeholder="+1 (813) 377-6678"
-                            className="w-full bg-transparent outline-none border-b border-white/10 focus:border-[color:var(--accent2-400)] py-3 text-white/90"
-                        />
-                    </Field>
-                </div>
 
-                {/* Message + actions */}
-                <div className="lg:col-span-6 space-y-6 px-2 sm:px-4">
-                    <Field label="Message">
-                        <textarea
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                            placeholder="Tell us what you need…"
-                            rows={6}
-                            className="w-full resize-none bg-transparent outline-none border-b border-white/10 focus:border-[color:var(--accent2-400)] py-3 text-white/90"
-                        />
-                    </Field>
-
-                    {/* Action buttons */}
-                    <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                        {/* Send by email (mailto) */}
-                        <button
-                            type="submit"
-                            className="inline-flex items-center justify-center rounded-full px-6 py-3
-                         bg-[color:var(--accent2-500)] hover:bg-[color:var(--accent2-600)]
-                         text-black/90 transition
-                         ring-1 ring-[color:var(--accent2-400)]/45
-                         shadow-[0_12px_28px_-12px_color-mix(in_srgb,var(--accent2)_45%,transparent)]"
-                        >
-                            Send by email
-                            <span className="ml-2" aria-hidden>✉️</span>
-                        </button>
-
-                        {/* WhatsApp */}
-                        <button
-                            type="button"
-                            onClick={openWhatsApp}
-                            className="inline-flex items-center justify-center rounded-full px-6 py-3
-                         bg-white/5 hover:bg-white/10 transition
-                         ring-1 ring-white/12 text-white"
-                        >
-                            Contact via WhatsApp
-                            <span className="ml-2" aria-hidden>💬</span>
-                        </button>
-
-                        {/* Call */}
-                        <a
-                            href={`tel:${callPhone}`}
-                            className="inline-flex items-center justify-center rounded-full px-6 py-3
-                         ring-1 ring-[color:var(--gold-strong)]/35
-                         bg-[color:var(--gold-strong)]/12 hover:bg-[color:var(--gold-strong)]/20
-                         text-[color:var(--gold-strong)] transition"
-                        >
-                            Call by phone
-                            <span className="ml-2" aria-hidden>📞</span>
-                        </a>
-                    </div>
-
-                    {/* Reply info */}
-                    <p className="text-white/55 text-sm">
-                        We usually reply in under 24&nbsp;hours. You can also write to{" "}
-                        <a
-                            href={`mailto:${toEmail}`}
-                            className="underline decoration-[color:var(--accent2-400)]/60 underline-offset-4 hover:text-[color:var(--accent2-400)]"
-                        >
-                            {toEmail}
-                        </a>.
-                    </p>
-                </div>
-            </form>
         </Section>
     );
 }
