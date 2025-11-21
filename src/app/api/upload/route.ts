@@ -28,39 +28,45 @@ export async function POST(req: NextRequest) {
         stream.push(buffer);
         stream.push(null);
 
-        // 2. Autenticación (Volvemos al Service Account, es mejor para esto)
+        // 2. Autenticación (Service Account)
         const auth = new google.auth.GoogleAuth({
             credentials: {
                 client_email: CLIENT_EMAIL,
                 private_key: PRIVATE_KEY.replace(/\\n/g, '\n'),
             },
-            // Scope para acceder a archivos
             scopes: ['https://www.googleapis.com/auth/drive'],
         });
 
         const drive = google.drive({ version: 'v3', auth });
 
-        // 3. Subir archivo CON SOPORTE PARA SHARED DRIVES
+        // 3. Subir archivo
         const response = await drive.files.create({
             requestBody: {
                 name: file.name,
                 mimeType: 'application/pdf',
-                parents: [FOLDER_ID], // ID de la carpeta compartida
+                parents: [FOLDER_ID],
             },
             media: {
                 mimeType: 'application/pdf',
                 body: stream,
             },
-            //ESTAS DOS LINEAS SON LA SOLUCION MAGICA:
             supportsAllDrives: true,
             fields: 'id, name, webViewLink',
         });
 
         return NextResponse.json({ success: true, fileId: response.data.id });
 
-    } catch (error: any) {
+    } catch (error: unknown) { // <--- CAMBIO AQUÍ: Usamos 'unknown' en lugar de 'any'
         console.error('Google Drive Error:', error);
-        // Esto nos dará más detalles en la consola si falla
-        return NextResponse.json({ error: error.message || 'Upload failed' }, { status: 500 });
+
+        // CAMBIO AQUÍ: Verificamos el tipo de error de forma segura
+        let errorMessage = 'Upload failed';
+        if (error instanceof Error) {
+            errorMessage = error.message;
+        } else if (typeof error === 'string') {
+            errorMessage = error;
+        }
+
+        return NextResponse.json({ error: errorMessage }, { status: 500 });
     }
 }
