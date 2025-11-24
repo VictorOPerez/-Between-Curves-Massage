@@ -55,21 +55,6 @@ export default function NavbarMinimal({
                         </span>
                     </div>
 
-                    {/* Home centrado (solo icono) */}
-                    <Link
-                        href="/"
-                        className={clsx(
-                            "inline-flex items-center justify-center h-10 w-10 rounded-full",
-                            "ring-1 ring-white/10 text-white/80 hover:text-white hover:ring-white/20 transition",
-                            pathname === "/" && "bg-white/10 text-white ring-white/20"
-                        )}
-                        aria-label="Inicio"
-                        aria-current={pathname === "/" ? "page" : undefined}
-                        title="Inicio"
-                    >
-                        <Home className="h-5 w-5" />
-                    </Link>
-
                     {/* Botones derecha: Book + Contacto */}
                     <div className="flex items-center gap-2">
                         {/* BOOK */}

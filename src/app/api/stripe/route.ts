@@ -16,9 +16,12 @@ export async function POST(req: Request) {
 
     try {
         event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
-    } catch (err: any) {
-        console.error(`Webhook Error: ${err.message}`)
-        return NextResponse.json({ error: err.message }, { status: 400 })
+    } catch (err) {
+        // Verificamos si 'err' es realmente un objeto de Error estándar
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+
+        console.error(`Webhook Error: ${errorMessage}`)
+        return NextResponse.json({ error: errorMessage }, { status: 400 })
     }
 
     if (event.type === 'checkout.session.completed') {

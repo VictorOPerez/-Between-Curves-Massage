@@ -403,7 +403,7 @@ export default function CalendarPage() {
                                     </div>
                                 </div>
 
-                                {selectedEvent.resource?.amountPending! > 0 && (
+                                {(selectedEvent.resource?.amountPending ?? 0) > 0 && (
                                     <button
                                         onClick={handleMarkAsPaid}
                                         className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-xl shadow-md shadow-emerald-500/40 flex items-center justify-center gap-2 transition transform active:scale-95"
@@ -413,12 +413,13 @@ export default function CalendarPage() {
                                     </button>
                                 )}
 
-                                {selectedEvent.resource?.amountPending === 0 && (
+                                {(selectedEvent.resource?.amountPending ?? 0) === 0 && (
                                     <div className="w-full py-2.5 bg-slate-50 text-slate-600 font-medium rounded-xl text-sm flex items-center justify-center gap-1">
                                         <span>✅</span>
                                         <span>Cuenta saldada</span>
                                     </div>
                                 )}
+
                             </div>
 
                             <div className="space-y-3 pt-3 border-t border-slate-100">

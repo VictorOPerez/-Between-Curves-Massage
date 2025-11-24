@@ -5,7 +5,11 @@ import { format, parse, startOfWeek, getDay } from 'date-fns'
 import { enUS } from 'date-fns/locale'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { useState, useEffect, useCallback, useMemo } from 'react'
-
+interface DateHeaderProps {
+  date: Date
+  label: string
+  onDrillDown: () => void
+}
 const locales = {
   'en-US': enUS,
 }
@@ -58,7 +62,7 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
         }
       }
 
-      if (storedView && Object.values(Views).includes(storedView as any)) {
+      if (storedView && Object.values(Views).includes(storedView as View)) {
         setView(storedView as View)
       }
     }
@@ -95,7 +99,8 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
   }, [])
 
 
-  const CustomDateHeader = ({ date: headerDate, label, onDrillDown }: any) => {
+  // Reemplaza la línea con 'any' por esta:
+  const CustomDateHeader = ({ date: headerDate, label, onDrillDown }: DateHeaderProps) => {
     const dayEvents = events.filter(
       (e) =>
         e.start.getDate() === headerDate.getDate() &&
