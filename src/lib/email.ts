@@ -30,6 +30,13 @@ export async function sendConfirmationEmail(
   time: string,
   serviceName: string
 ) {
+
+  // --- AGREGA ESTOS LOGS PARA VER QUÉ PASA ---
+  console.log("--- INTENTANDO ENVIAR CORREOS ---");
+  console.log("1. Email Cliente:", to);
+  console.log("2. Email Dueña:", OWNER_EMAIL);
+
+
   const htmlContent = `
     <div style="font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif; color: #25413A; max-width: 600px; margin: 0 auto;">
       <div style="background-color: #25413A; padding: 20px; text-align: center;">
