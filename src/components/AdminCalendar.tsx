@@ -425,7 +425,6 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
         components={components}
         eventPropGetter={eventPropGetter}
         selectable={view === Views.MONTH ? false : 'ignoreEvents'} // 👈 solo seleccionable en week/day
-        longPressThreshold={10}
         onSelectSlot={(slotInfo) => {
           // En Month no hacemos nada aquí, solo se usa el header (onDrillDown)
           if (view !== Views.MONTH) {
