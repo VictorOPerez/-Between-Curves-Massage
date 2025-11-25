@@ -32,7 +32,9 @@ export default function CalendarPage() {
         setIsLoading(true)
         try {
             const data = await fetchBookings()
-            setEvents(data)
+            // ✅ AHORA (Solución):
+            // Le forzamos el tipo usando 'as CalendarEvent[]'
+            setEvents(data as CalendarEvent[])
         } catch (error) {
             console.error("Error cargando citas:", error)
             alert("Error al cargar las citas. Revisa tu conexión.")
