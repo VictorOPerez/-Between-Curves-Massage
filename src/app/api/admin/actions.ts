@@ -203,7 +203,22 @@ export async function createBooking(data: {
 }
 
 // --- ADMINISTRACIÓN ---
+// Define la estructura de los datos que vienen de Supabase
+interface BookingRow {
+  id: number
+  start_time: string
+  end_time: string
+  client_name: string
+  service_name: string
+  status: string
+  client_phone: string | null
+  amount_paid: number
+  amount_pending: number
+  notes: string | null
+}
+
 export async function fetchBookings() {
+  // 1. Obtenemos los datos (Supabase a veces devuelve 'any' si no tienes tipos generados)
   const { data, error } = await supabase
     .from('bookings')
     .select('*')
@@ -211,7 +226,8 @@ export async function fetchBookings() {
 
   if (error || !data) return []
 
-  return data.map((booking: any) => ({
+  // 2. Aquí usamos la interfaz 'BookingRow' en lugar de 'any'
+  return data.map((booking: BookingRow) => ({
     id: booking.id,
     title: `${booking.client_name} - ${booking.service_name}`,
     start: new Date(booking.start_time),
@@ -219,14 +235,13 @@ export async function fetchBookings() {
     resource: {
       status: booking.status,
       clientName: booking.client_name,
-      clientPhone: booking.client_phone,
+      clientPhone: booking.client_phone || '', // Manejamos si viene null
       amountPaid: booking.amount_paid,
       amountPending: booking.amount_pending,
-      notes: booking.notes,
+      notes: booking.notes || '', // Manejamos si viene null
     },
   }))
 }
-
 export async function markAsPaid(bookingId: number, totalAmount: number) {
   const { error } = await supabase
     .from('bookings')
