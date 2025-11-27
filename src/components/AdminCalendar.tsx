@@ -5,6 +5,7 @@ import { format, parse, startOfWeek, getDay } from 'date-fns'
 import { enUS } from 'date-fns/locale'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { useState, useEffect, useCallback, useMemo } from 'react'
+
 interface DateHeaderProps {
   date: Date
   label: string
@@ -49,7 +50,8 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
   const [date, setDate] = useState(new Date())
   const [view, setView] = useState<View>(Views.MONTH)
   const [mounted, setMounted] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)   // 👈 NUEVO
+  const [isMobile, setIsMobile] = useState(false)
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedDate = window.localStorage.getItem('adminCalendarDate')
@@ -70,22 +72,24 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
     setMounted(true)
   }, [])
 
-
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
         setView(Views.DAY)
-        setIsMobile(true)           // 👈 aquí
+        setIsMobile(true)
       } else {
         setView(Views.MONTH)
-        setIsMobile(false)          // 👈 aquí
+        setIsMobile(false)
       }
     }
-    handleResize()
+    // Ejecutar una vez al montar para detectar si es móvil de inicio
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth < 768) setIsMobile(true);
+    }
+
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
-
 
   const onNavigate = useCallback((newDate: Date) => {
     setDate(newDate)
@@ -101,6 +105,15 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
     }
   }, [])
 
+  // 1. AGREGO ESTA FUNCIÓN para que el clic en el día funcione manualmente
+  const onDrillDown = useCallback((drillDate: Date) => {
+    setDate(drillDate)
+    setView(Views.DAY)
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('adminCalendarDate', drillDate.toISOString())
+      window.localStorage.setItem('adminCalendarView', Views.DAY)
+    }
+  }, [])
 
   const CustomDateHeader = ({ date: headerDate, label }: DateHeaderProps) => {
     const dayEvents = events.filter(
@@ -112,19 +125,13 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
 
     const total = dayEvents.length
 
-    // --- 1) Colores por status ---
     const getColor = (status?: EventStatus): string => {
       switch (status) {
-        case 'paid_full':
-          return '#059669' // verde
-        case 'confirmed_stripe':
-          return '#F59E0B' // naranja
-        case 'confirmed_trust':
-          return '#0EA5E9' // celeste
-        case 'pending':
-          return '#F97373' // rojo
-        default:
-          return '#0EA5E9'
+        case 'paid_full': return '#059669'
+        case 'confirmed_stripe': return '#F59E0B'
+        case 'confirmed_trust': return '#0EA5E9'
+        case 'pending': return '#F97373'
+        default: return '#0EA5E9'
       }
     }
 
@@ -133,14 +140,12 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
     const hasTrust = dayEvents.some((e) => e.resource?.status === 'confirmed_trust')
     const hasPaidFull = dayEvents.some((e) => e.resource?.status === 'paid_full')
 
-    // --- 2) Color del círculo de contador (debajo) ---
     let summaryColor = 'bg-sky-500'
     if (hasPending) summaryColor = 'bg-rose-500'
     else if (hasStripe) summaryColor = 'bg-amber-500'
     else if (hasPaidFull) summaryColor = 'bg-emerald-600'
     else if (hasTrust) summaryColor = 'bg-sky-500'
 
-    // --- 3) Círculos apilados y comprimidos ---
     const MAX_STACKED = 8
     const visibleEvents = dayEvents.slice(0, MAX_STACKED)
     const visibleCount = visibleEvents.length
@@ -148,21 +153,21 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
     const maxSpreadPx = 18
     const step = visibleCount > 1 ? maxSpreadPx / (visibleCount - 1) : 0
 
-    // Día sin citas: solo el label
+    // 2. AGREGO "pointer-events-none" para que el clic atraviese el header
     if (total === 0) {
       return (
-        <div className="flex flex-col items-center gap-1 w-full">
+        <div className="flex flex-col items-center gap-1 w-full pointer-events-none">
           <span className="font-medium text-[11px] text-slate-600">{label}</span>
         </div>
       )
     }
 
+    // 2. AGREGO "pointer-events-none" aquí también
     return (
-      <div className="flex flex-col items-center gap-1 w-full">
+      <div className="flex flex-col items-center gap-1 w-full pointer-events-none">
         <span className="font-medium text-[11px] text-slate-600">{label}</span>
 
         <div className="flex flex-col items-center gap-1">
-          {/* Círculos apilados (uno por cita) */}
           <div className="relative h-4 w-10 overflow-hidden">
             {visibleEvents.map((ev, idx) => (
               <span
@@ -176,7 +181,6 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
             ))}
           </div>
 
-          {/* Círculo con total de citas del día */}
           <div
             className={[
               'inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold text-white shadow-sm',
@@ -190,9 +194,6 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
     )
   }
 
-
-
-  // 👇 useMemo SIEMPRE se llama, antes del return condicional
   const { components, eventPropGetter } = useMemo(
     () => ({
       components: {
@@ -213,21 +214,18 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
             borderColor = '#2C7A7B'
             color = '#134E4A'
             break
-
           case 'confirmed_stripe':
             backgroundColor = '#FDFDEA'
             borderLeft = '4px solid #D69E2E'
             borderColor = '#D69E2E'
             color = '#92400E'
             break
-
           case 'confirmed_trust':
             backgroundColor = '#EBF8FF'
             borderLeft = '4px solid #63B3ED'
             borderColor = '#63B3ED'
             color = '#1A365D'
             break
-
           case 'pending':
             backgroundColor = '#FFF5F5'
             borderLeft = '4px solid #F56565'
@@ -261,7 +259,6 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
     [view, events, isMobile]
   )
 
-  // 👇 el skeleton va DESPUÉS de todos los hooks
   if (!mounted) {
     return (
       <div className="h-[700px] bg-white/90 p-4 md:p-5 rounded-2xl shadow-[0_18px_45px_rgba(15,23,42,0.10)] border border-slate-100 animate-pulse" />
@@ -273,6 +270,8 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
       <style jsx global>{`
         .rbc-calendar {
           font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+          /* 3. AGREGO ESTO PARA ARREGLAR EL SCROLL HORIZONTAL */
+          touch-action: pan-y !important;
         }
         .rbc-current-time-indicator {
           display: none !important;
@@ -284,13 +283,11 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
           gap: 0.5rem;
           align-items: center;
         }
-
         .rbc-toolbar-label {
           font-weight: 600;
           color: #0f172a;
           font-size: 0.95rem;
         }
-
         .rbc-header {
           padding: 10px 0;
           font-weight: 600;
@@ -299,60 +296,48 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
           text-transform: uppercase;
           letter-spacing: 0.06em;
         }
-
         .rbc-today {
           background-color: #ecfdf3;
         }
-
         .rbc-time-view,
         .rbc-month-view {
           border: none;
         }
-
         .rbc-time-header,
         .rbc-row {
           border-color: #e5e7eb;
         }
-
         .rbc-time-content {
           border-top: 1px solid #e5e7eb;
         }
-
         .rbc-event {
           min-height: 22px !important;
           padding: 0 !important;
           box-sizing: border-box;
         }
-
         .rbc-event-label {
           display: none !important;
         }
-
         .rbc-event-content {
           font-size: 0.75rem;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
         }
-
         .rbc-day-slot .rbc-time-slot {
           border-top: 1px solid #f3f4f6;
           position: relative;
         }
-
         .rbc-time-gutter .rbc-time-slot {
           color: #9ca3af;
           font-size: 0.7rem;
         }
-
         .rbc-time-view .rbc-header {
           border-bottom: 2px solid #e5e7eb;
         }
-
         .rbc-day-slot .rbc-events-container {
           margin-right: 0px !important;
         }
-
         /* Hover para crear cita */
         .rbc-day-slot .rbc-time-slot:hover::after {
           content: '+ Cita';
@@ -370,13 +355,11 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
           border: 1px dashed rgba(16, 185, 129, 0.6);
           pointer-events: none;
         }
-
         .rbc-day-slot .rbc-time-slot:hover {
           background-color: #f0fdfa;
           cursor: pointer;
           transition: background 0.15s ease-out;
         }
-
         .rbc-toolbar button {
           border: 1px solid #e5e7eb;
           padding: 6px 12px;
@@ -387,22 +370,20 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
           font-weight: 500;
           transition: all 0.15s ease-out;
         }
-
         .rbc-toolbar button:hover {
           background-color: #f9fafb;
           color: #111827;
           box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
         }
-
         .rbc-toolbar .rbc-btn-group button.rbc-active {
           background-color: #0f766e !important;
           color: #ffffff !important;
           border-color: #0f766e !important;
           box-shadow: 0 3px 10px rgba(16, 185, 129, 0.35);
         }
-           .rbc-show-more {
-    display: none !important;
-  }
+        .rbc-show-more {
+          display: none !important;
+        }
       `}</style>
 
       <Calendar
@@ -412,17 +393,24 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
         onNavigate={onNavigate}
         view={view}
         onView={onView}
+
+        // 4. VINCULO EL CLICK MANUAL
+        onDrillDown={onDrillDown}
+
         startAccessor="start"
         endAccessor="end"
         min={new Date(0, 0, 0, 7, 0, 0)}
         max={new Date(0, 0, 0, 21, 0, 0)}
         components={components}
         eventPropGetter={eventPropGetter}
-        selectable={view === Views.MONTH ? false : 'ignoreEvents'} // 👈 solo seleccionable en week/day
+        selectable={view === Views.MONTH ? false : 'ignoreEvents'}
+
+        // 5. AGREGO ESTO PARA MEJORAR LA SENSIBILIDAD DEL TOUCH
+        longPressThreshold={20}
+
         onSelectSlot={(slotInfo) => {
-          // En Month no hacemos nada aquí, solo se usa el header (onDrillDown)
           if (view !== Views.MONTH) {
-            onAddEvent(slotInfo) // crea cita manual en week/day
+            onAddEvent(slotInfo)
           }
         }}
         onSelectEvent={(event) => onEventClick(event)}
@@ -437,7 +425,6 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
           showMore: (total) => `+${total} más`,
         }}
       />
-
     </div>
   )
 }
