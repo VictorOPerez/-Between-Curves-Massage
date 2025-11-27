@@ -258,7 +258,7 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
         }
       },
     }),
-    [view, events]
+    [view, events, isMobile]
   )
 
   // 👇 el skeleton va DESPUÉS de todos los hooks
