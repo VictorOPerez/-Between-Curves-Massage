@@ -1,4 +1,10 @@
 'use server'
+import {
+  createGoogleCalendarEvent,
+  statusToColorId,
+  updateGoogleEventColor,
+  deleteGoogleEvent,
+} from '@/lib/googleCalendar'
 
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
@@ -162,7 +168,6 @@ export async function createStripeSession(data: {
   }
 }
 
-// --- 2. CREAR RESERVA MANUAL (Para el Admin Calendar) ---
 export async function createBooking(data: {
   serviceId: string
   serviceName: string
@@ -175,22 +180,60 @@ export async function createBooking(data: {
   amountPaid: number
 }) {
   try {
-    const { error } = await supabase.from('bookings').insert({
-      service_id: data.serviceId,
-      service_name: data.serviceName,
-      client_name: data.clientName,
-      client_email: data.clientEmail,
-      client_phone: data.clientPhone,
-      start_time: data.startTime.toISOString(),
-      end_time: data.endTime.toISOString(),
-      amount_total: data.amountTotal,
-      amount_paid: data.amountPaid,
-      amount_pending: data.amountTotal - data.amountPaid,
-      status: 'confirmed_trust', // Estado para reservas manuales
-      notes: 'Reserva Manual desde Admin',
-    })
+    // 1) Guardar en BD
+    const { data: inserted, error } = await supabase
+      .from('bookings')
+      .insert({
+        service_id: data.serviceId,
+        service_name: data.serviceName,
+        client_name: data.clientName,
+        client_email: data.clientEmail,
+        client_phone: data.clientPhone,
+        start_time: data.startTime.toISOString(),
+        end_time: data.endTime.toISOString(),
+        amount_total: data.amountTotal,
+        amount_paid: data.amountPaid,
+        amount_pending: data.amountTotal - data.amountPaid,
+        status: 'confirmed_trust', // reserva manual sin pago
+        notes: 'Reserva Manual desde Admin',
+      })
+      .select('id')
+      .single()
 
-    if (error) throw new Error(error.message)
+    if (error || !inserted) throw new Error(error?.message ?? 'Insert failed')
+
+    const bookingId = inserted.id
+
+    // 2) Crear evento en Google Calendar
+    try {
+      const colorId = statusToColorId('confirmed_trust')
+
+      const calendarResult = await createGoogleCalendarEvent({
+        summary: `${data.clientName} – ${data.serviceName}`,
+        description:
+          `Cliente: ${data.clientName}\n` +
+          `Email: ${data.clientEmail}\n` +
+          (data.clientPhone ? `Teléfono: ${data.clientPhone}\n` : '') +
+          `Total: $${data.amountTotal.toFixed(2)}\n` +
+          `Depósito: $${data.amountPaid.toFixed(2)}`,
+        start: data.startTime,
+        end: data.endTime,
+        clientName: data.clientName,
+        clientEmail: data.clientEmail,
+        clientPhone: data.clientPhone,
+        colorId,
+      })
+
+      if (calendarResult.success && calendarResult.eventId) {
+        await supabase
+          .from('bookings')
+          .update({ google_event_id: calendarResult.eventId })
+          .eq('id', bookingId)
+      }
+    } catch (err) {
+      console.error('Error creando evento de calendario para reserva manual:', err)
+      // No hacemos throw: la reserva en BD sigue siendo válida
+    }
 
     revalidatePath('/admin/calendar')
     return { success: true as const }
@@ -201,6 +244,7 @@ export async function createBooking(data: {
     return { success: false as const, error: message }
   }
 }
+
 
 // --- ADMINISTRACIÓN ---
 // Define la estructura de los datos que vienen de Supabase
@@ -243,19 +287,50 @@ export async function fetchBookings() {
   }))
 }
 export async function markAsPaid(bookingId: number, totalAmount: number) {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('bookings')
-    .update({ status: 'paid_full', amount_paid: totalAmount, amount_pending: 0 })
+    .update({
+      status: 'paid_full',
+      amount_paid: totalAmount,
+      amount_pending: 0,
+    })
     .eq('id', bookingId)
+    .select('google_event_id')
+    .single()
 
   if (error) return { success: false as const }
+
+  // Actualizar color en Google Calendar → verde (paid_full)
+  if (data?.google_event_id) {
+    const colorId = statusToColorId('paid_full')
+    await updateGoogleEventColor(data.google_event_id, colorId)
+  }
+
   revalidatePath('/admin/calendar')
   return { success: true as const }
 }
 
+
 export async function cancelBooking(bookingId: number) {
-  const { error } = await supabase.from('bookings').delete().eq('id', bookingId)
+  // 1) Leer google_event_id antes de borrar
+  const { data } = await supabase
+    .from('bookings')
+    .select('google_event_id')
+    .eq('id', bookingId)
+    .single()
+
+  const { error } = await supabase
+    .from('bookings')
+    .delete()
+    .eq('id', bookingId)
+
   if (error) return { success: false as const }
+
+  // 2) Borrar también en Google Calendar
+  if (data?.google_event_id) {
+    await deleteGoogleEvent(data.google_event_id)
+  }
+
   revalidatePath('/admin/calendar')
   return { success: true as const }
 }

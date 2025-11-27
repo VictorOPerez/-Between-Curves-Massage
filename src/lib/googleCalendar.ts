@@ -125,3 +125,56 @@ export async function createGoogleCalendarEvent(
         return { success: false, error: errorMessage };
     }
 }
+
+
+// Actualizar solo el color de un evento existente
+export async function updateGoogleEventColor(
+    eventId: string,
+    colorId?: string
+): Promise<{ success: boolean; error?: string }> {
+    try {
+        if (!calendar || !GOOGLE_CALENDAR_ID) {
+            return {
+                success: false,
+                error: 'Google Calendar no está configurado correctamente',
+            };
+        }
+
+        await calendar.events.patch({
+            calendarId: GOOGLE_CALENDAR_ID,
+            eventId,
+            requestBody: { colorId },
+        });
+
+        return { success: true };
+    } catch (err) {
+        console.error('[GoogleCalendar] Error actualizando color:', err);
+        const msg = err instanceof Error ? err.message : 'Unknown calendar error';
+        return { success: false, error: msg };
+    }
+}
+
+// Borrar el evento de Google Calendar (para cancelaciones)
+export async function deleteGoogleEvent(
+    eventId: string
+): Promise<{ success: boolean; error?: string }> {
+    try {
+        if (!calendar || !GOOGLE_CALENDAR_ID) {
+            return {
+                success: false,
+                error: 'Google Calendar no está configurado correctamente',
+            };
+        }
+
+        await calendar.events.delete({
+            calendarId: GOOGLE_CALENDAR_ID,
+            eventId,
+        });
+
+        return { success: true };
+    } catch (err) {
+        console.error('[GoogleCalendar] Error borrando evento:', err);
+        const msg = err instanceof Error ? err.message : 'Unknown calendar error';
+        return { success: false, error: msg };
+    }
+}

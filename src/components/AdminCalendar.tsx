@@ -49,7 +49,7 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
   const [date, setDate] = useState(new Date())
   const [view, setView] = useState<View>(Views.MONTH)
   const [mounted, setMounted] = useState(false)
-
+  const [isMobile, setIsMobile] = useState(false)   // 👈 NUEVO
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedDate = window.localStorage.getItem('adminCalendarDate')
@@ -75,14 +75,17 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
     const handleResize = () => {
       if (window.innerWidth < 768) {
         setView(Views.DAY)
+        setIsMobile(true)           // 👈 aquí
       } else {
         setView(Views.MONTH)
+        setIsMobile(false)          // 👈 aquí
       }
     }
     handleResize()
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
+
 
   const onNavigate = useCallback((newDate: Date) => {
     setDate(newDate)
@@ -107,14 +110,14 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
         e.start.getMonth() === headerDate.getMonth() &&
         e.start.getFullYear() === headerDate.getFullYear()
     )
-
+    const handleClick = !isMobile ? onDrillDown : undefined  // 👈 clave
     const total = dayEvents.length
     if (total === 0) {
       // Día sin citas: solo el label pero sigue funcionando el drilldown
       return (
         <button
           type="button"
-          onClick={onDrillDown}
+          onClick={handleClick}
           className="flex flex-col items-center gap-1 w-full focus:outline-none"
         >
           <span className="font-medium text-[11px] text-slate-600">{label}</span>
@@ -162,7 +165,7 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
     return (
       <button
         type="button"
-        onClick={onDrillDown} // drilldown a vista día
+        onClick={handleClick}
         className="flex flex-col items-center gap-1 w-full focus:outline-none"
       >
         <span className="font-medium text-[11px] text-slate-600">{label}</span>
