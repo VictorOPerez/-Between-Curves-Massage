@@ -184,38 +184,28 @@ export default function CalendarPage() {
     return (
         <div className="space-y-6 relative">
             {/* HEADER */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700 mb-1">
-                        Panel de Reservas
-                    </p>
-                    <h2 className="text-2xl md:text-[26px] font-semibold tracking-tight text-slate-900">
-                        Agenda de Citas
-                    </h2>
-                    <p className="mt-1 text-sm text-slate-500">
-                        Gestiona tus reservas, pagos y espacios disponibles de forma clara.
-                    </p>
-                </div>
-
-                <div className="flex gap-3">
+            <div className="relative space-y-4">
+                {/* Barra superior mínima: solo el botón, pegado a la derecha */}
+                <div className="flex justify-end">
                     <button
                         onClick={handleManualOpen}
-                        className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-emerald-500/30 hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+                        className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-emerald-500/40 hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
                     >
                         <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white/15 text-lg leading-none">
                             +
                         </span>
-                        <span>Agendar cita manual</span>
+                        <span>Agendar cita</span>
                     </button>
                 </div>
+
+                {/* CALENDARIO (igual que antes) */}
+                <AdminCalendar
+                    events={events}
+                    onAddEvent={handleSelectSlot}
+                    onEventClick={handleSelectEvent}
+                />
             </div>
 
-            {/* CALENDARIO */}
-            <AdminCalendar
-                events={events}
-                onAddEvent={handleSelectSlot}
-                onEventClick={handleSelectEvent}
-            />
 
             {/* LEYENDA */}
             <div className="flex flex-wrap gap-4 text-xs text-slate-600 mt-2 px-4 py-3 rounded-2xl bg-slate-50 border border-slate-100 shadow-sm">

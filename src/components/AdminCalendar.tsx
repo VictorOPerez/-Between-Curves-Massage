@@ -8,8 +8,8 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 interface DateHeaderProps {
   date: Date
   label: string
-  onDrillDown: () => void
 }
+
 const locales = {
   'en-US': enUS,
 }
@@ -102,28 +102,15 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
   }, [])
 
 
-  // Reemplaza la línea con 'any' por esta:
-  const CustomDateHeader = ({ date: headerDate, label, onDrillDown }: DateHeaderProps) => {
+  const CustomDateHeader = ({ date: headerDate, label }: DateHeaderProps) => {
     const dayEvents = events.filter(
       (e) =>
         e.start.getDate() === headerDate.getDate() &&
         e.start.getMonth() === headerDate.getMonth() &&
         e.start.getFullYear() === headerDate.getFullYear()
     )
-    const handleClick = !isMobile ? onDrillDown : undefined  // 👈 clave
+
     const total = dayEvents.length
-    if (total === 0) {
-      // Día sin citas: solo el label pero sigue funcionando el drilldown
-      return (
-        <button
-          type="button"
-          onClick={handleClick}
-          className="flex flex-col items-center gap-1 w-full focus:outline-none"
-        >
-          <span className="font-medium text-[11px] text-slate-600">{label}</span>
-        </button>
-      )
-    }
 
     // --- 1) Colores por status ---
     const getColor = (status?: EventStatus): string => {
@@ -158,16 +145,20 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
     const visibleEvents = dayEvents.slice(0, MAX_STACKED)
     const visibleCount = visibleEvents.length
 
-    // Queremos que el grupo entero no pase de ~22px de ancho
     const maxSpreadPx = 18
     const step = visibleCount > 1 ? maxSpreadPx / (visibleCount - 1) : 0
 
+    // Día sin citas: solo el label
+    if (total === 0) {
+      return (
+        <div className="flex flex-col items-center gap-1 w-full">
+          <span className="font-medium text-[11px] text-slate-600">{label}</span>
+        </div>
+      )
+    }
+
     return (
-      <button
-        type="button"
-        onClick={handleClick}
-        className="flex flex-col items-center gap-1 w-full focus:outline-none"
-      >
+      <div className="flex flex-col items-center gap-1 w-full">
         <span className="font-medium text-[11px] text-slate-600">{label}</span>
 
         <div className="flex flex-col items-center gap-1">
@@ -195,7 +186,7 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
             {total}
           </div>
         </div>
-      </button>
+      </div>
     )
   }
 
