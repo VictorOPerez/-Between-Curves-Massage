@@ -104,7 +104,6 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
     }
   }, [])
 
-  // Esta función ahora la llamaremos SOLO desde el Header (el número)
   const onDrillDown = useCallback((drillDate: Date) => {
     setDate(drillDate)
     setView(Views.DAY)
@@ -114,6 +113,7 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
     }
   }, [])
 
+  // 👇 AQUÍ ESTÁ EL CAMBIO CLAVE (La Magia Anti-Brujería)
   const CustomDateHeader = ({ date: headerDate, label }: DateHeaderProps) => {
     const dayEvents = events.filter(
       (e) =>
@@ -148,31 +148,43 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
     const MAX_STACKED = 8
     const visibleEvents = dayEvents.slice(0, MAX_STACKED)
     const visibleCount = visibleEvents.length
-
     const maxSpreadPx = 18
     const step = visibleCount > 1 ? maxSpreadPx / (visibleCount - 1) : 0
 
-    // 1. CAMBIO IMPORTANTE: Quitamos "pointer-events-none" y agregamos "onClick" y "cursor-pointer"
-    // Esto hace que SOLO tocar el número te lleve al día.
+    // CASO 1: Día vacío
     if (total === 0) {
       return (
-        <div
-          className="flex flex-col items-center gap-1 w-full cursor-pointer hover:bg-slate-50 rounded p-1 transition-colors"
-          onClick={() => onDrillDown(headerDate)}
-        >
-          <span className="font-medium text-[11px] text-slate-600">{label}</span>
+        // pointer-events-none: Si tocas lo blanco, el dedo atraviesa y hace scroll.
+        <div className="flex flex-col items-center gap-1 w-full pointer-events-none">
+          {/* pointer-events-auto: Reactivamos el clic SOLO en el número */}
+          <span
+            className="font-medium text-[11px] text-slate-600 cursor-pointer pointer-events-auto p-1 rounded hover:bg-slate-100"
+            onClick={() => onDrillDown(headerDate)}
+          >
+            {label}
+          </span>
         </div>
       )
     }
 
+    // CASO 2: Día con eventos
     return (
-      <div
-        className="flex flex-col items-center gap-1 w-full cursor-pointer hover:bg-slate-50 rounded p-1 transition-colors"
-        onClick={() => onDrillDown(headerDate)}
-      >
-        <span className="font-medium text-[11px] text-slate-600">{label}</span>
+      // pointer-events-none en el contenedor GRANDE
+      <div className="flex flex-col items-center gap-1 w-full pointer-events-none">
 
-        <div className="flex flex-col items-center gap-1">
+        {/* El número ahora es "clicable" individualmente */}
+        <span
+          className="font-medium text-[11px] text-slate-600 cursor-pointer pointer-events-auto p-1 rounded hover:bg-slate-100"
+          onClick={() => onDrillDown(headerDate)}
+        >
+          {label}
+        </span>
+
+        {/* El contenedor de los puntitos también es "clicable" */}
+        <div
+          className="flex flex-col items-center gap-1 cursor-pointer pointer-events-auto"
+          onClick={() => onDrillDown(headerDate)}
+        >
           <div className="relative h-4 w-10 overflow-hidden">
             {visibleEvents.map((ev, idx) => (
               <span
@@ -396,13 +408,7 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
         onNavigate={onNavigate}
         view={view}
         onView={onView}
-
-        // 2. CAMBIO IMPORTANTE: Ponemos drilldownView en NULL para desactivar el clic en la celda blanca
         drilldownView={null}
-
-        // 3. CAMBIO IMPORTANTE: Quitamos onDrillDown de aquí (se maneja solo en el CustomHeader)
-        // onDrillDown={onDrillDown} <--- ELIMINADO
-
         startAccessor="start"
         endAccessor="end"
         min={new Date(0, 0, 0, 7, 0, 0)}
