@@ -82,7 +82,6 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
         setIsMobile(false)
       }
     }
-    // Ejecutar una vez al montar para detectar si es móvil de inicio
     if (typeof window !== 'undefined') {
       if (window.innerWidth < 768) setIsMobile(true);
     }
@@ -105,7 +104,7 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
     }
   }, [])
 
-  // 1. AGREGO ESTA FUNCIÓN para que el clic en el día funcione manualmente
+  // Esta función ahora la llamaremos SOLO desde el Header (el número)
   const onDrillDown = useCallback((drillDate: Date) => {
     setDate(drillDate)
     setView(Views.DAY)
@@ -153,18 +152,24 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
     const maxSpreadPx = 18
     const step = visibleCount > 1 ? maxSpreadPx / (visibleCount - 1) : 0
 
-    // 2. AGREGO "pointer-events-none" para que el clic atraviese el header
+    // 1. CAMBIO IMPORTANTE: Quitamos "pointer-events-none" y agregamos "onClick" y "cursor-pointer"
+    // Esto hace que SOLO tocar el número te lleve al día.
     if (total === 0) {
       return (
-        <div className="flex flex-col items-center gap-1 w-full pointer-events-none">
+        <div
+          className="flex flex-col items-center gap-1 w-full cursor-pointer hover:bg-slate-50 rounded p-1 transition-colors"
+          onClick={() => onDrillDown(headerDate)}
+        >
           <span className="font-medium text-[11px] text-slate-600">{label}</span>
         </div>
       )
     }
 
-    // 2. AGREGO "pointer-events-none" aquí también
     return (
-      <div className="flex flex-col items-center gap-1 w-full pointer-events-none">
+      <div
+        className="flex flex-col items-center gap-1 w-full cursor-pointer hover:bg-slate-50 rounded p-1 transition-colors"
+        onClick={() => onDrillDown(headerDate)}
+      >
         <span className="font-medium text-[11px] text-slate-600">{label}</span>
 
         <div className="flex flex-col items-center gap-1">
@@ -270,7 +275,6 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
       <style jsx global>{`
         .rbc-calendar {
           font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
-          /* 3. AGREGO ESTO PARA ARREGLAR EL SCROLL HORIZONTAL */
           touch-action: pan-y !important;
         }
         .rbc-current-time-indicator {
@@ -338,7 +342,6 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
         .rbc-day-slot .rbc-events-container {
           margin-right: 0px !important;
         }
-        /* Hover para crear cita */
         .rbc-day-slot .rbc-time-slot:hover::after {
           content: '+ Cita';
           position: absolute;
@@ -394,8 +397,11 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
         view={view}
         onView={onView}
 
-        // 4. VINCULO EL CLICK MANUAL
-        onDrillDown={onDrillDown}
+        // 2. CAMBIO IMPORTANTE: Ponemos drilldownView en NULL para desactivar el clic en la celda blanca
+        drilldownView={null}
+
+        // 3. CAMBIO IMPORTANTE: Quitamos onDrillDown de aquí (se maneja solo en el CustomHeader)
+        // onDrillDown={onDrillDown} <--- ELIMINADO
 
         startAccessor="start"
         endAccessor="end"
@@ -404,10 +410,7 @@ export default function AdminCalendar({ events, onAddEvent, onEventClick }: Admi
         components={components}
         eventPropGetter={eventPropGetter}
         selectable={view === Views.MONTH ? false : 'ignoreEvents'}
-
-        // 5. AGREGO ESTO PARA MEJORAR LA SENSIBILIDAD DEL TOUCH
         longPressThreshold={20}
-
         onSelectSlot={(slotInfo) => {
           if (view !== Views.MONTH) {
             onAddEvent(slotInfo)
