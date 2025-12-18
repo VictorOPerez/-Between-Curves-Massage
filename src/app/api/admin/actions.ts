@@ -1,4 +1,5 @@
 'use server'
+
 import {
   createGoogleCalendarEvent,
   statusToColorId,
@@ -6,9 +7,9 @@ import {
   deleteGoogleEvent,
 } from '@/lib/googleCalendar'
 
+import { prisma } from '@/lib/prisma'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
 import { revalidatePath } from 'next/cache'
 import { SERVICES_DB } from '@/lib/services'
 import { addMinutes, setHours, setMinutes, isBefore, startOfDay, endOfDay, parseISO } from 'date-fns'
@@ -19,19 +20,14 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {})
 const COOKIE_NAME = process.env.COOKIE_NAME || 'admin_session'
 const PASSWORD = process.env.ADMIN_PASSWORD
 
-// Estado que devuelve la acción de login
-type LoginState = {
-  message?: string
-}
+type LoginState = { message?: string }
 
 export async function loginAction(
   prevState: LoginState | null | undefined,
   formData: FormData
-  // 👇 ELIMINADO "| void". Ahora solo devuelve Promise<LoginState>
 ): Promise<LoginState> {
   const passwordInput = formData.get('password') as string
 
-  // Simular latencia
   await new Promise(resolve => setTimeout(resolve, 500))
 
   if (passwordInput === PASSWORD) {
@@ -43,17 +39,15 @@ export async function loginAction(
       path: '/',
     })
 
-    // redirect() lanza un error interno ("throws"), por lo que técnicamente
-    // nunca se retorna nada aquí, lo cual es compatible con TypeScript 
-    // siempre que no definas explícitamente "void" en la firma.
     redirect('/admin/calendar')
   }
 
-  // Si llega aquí, devolvemos el estado de error
   return { message: 'PIN incorrecto. Intenta de nuevo.' }
 }
 
 // --- LÓGICA DE DISPONIBILIDAD ---
+type BusySlot = { startTime: Date; endTime: Date }
+
 export async function getAvailableSlots(dateStr: string, serviceId: string) {
   try {
     const WORK_START_HOUR = 9
@@ -65,16 +59,18 @@ export async function getAvailableSlots(dateStr: string, serviceId: string) {
     const duration = service.durationMin
 
     const searchDate = parseISO(dateStr)
-    const startDay = startOfDay(searchDate).toISOString()
-    const endDay = endOfDay(searchDate).toISOString()
+    const dayStart = startOfDay(searchDate)
+    const dayEnd = endOfDay(searchDate)
 
-    const { data: bookings, error } = await supabase
-      .from('bookings')
-      .select('start_time, end_time')
-      .gte('start_time', startDay)
-      .lte('start_time', endDay)
-
-    if (error) throw new Error(error.message)
+    const bookings: BusySlot[] = await prisma.booking.findMany({
+      where: {
+        startTime: {
+          gte: dayStart,
+          lte: dayEnd,
+        },
+      },
+      select: { startTime: true, endTime: true },
+    })
 
     const slots: string[] = []
     let currentTime = setMinutes(setHours(searchDate, WORK_START_HOUR), 0)
@@ -84,9 +80,9 @@ export async function getAvailableSlots(dateStr: string, serviceId: string) {
       const potentialEnd = addMinutes(currentTime, duration)
       if (isBefore(endTimeLimit, potentialEnd)) break
 
-      const isOccupied = bookings?.some(booking => {
-        const bookingStart = new Date(booking.start_time)
-        const bookingEnd = new Date(booking.end_time)
+      const isOccupied = bookings.some(b => {
+        const bookingStart = new Date(b.startTime)
+        const bookingEnd = new Date(b.endTime)
         return (
           (currentTime >= bookingStart && currentTime < bookingEnd) ||
           (potentialEnd > bookingStart && potentialEnd <= bookingEnd) ||
@@ -103,6 +99,7 @@ export async function getAvailableSlots(dateStr: string, serviceId: string) {
           })
         )
       }
+
       currentTime = addMinutes(currentTime, TIME_SLOT_INTERVAL)
     }
 
@@ -161,8 +158,7 @@ export async function createStripeSession(data: {
 
     return { success: true as const, url: session.url }
   } catch (error: unknown) {
-    const message =
-      error instanceof Error ? error.message : 'Unknown error while creating Stripe session'
+    const message = error instanceof Error ? error.message : 'Unknown error while creating Stripe session'
     console.error('Error Stripe:', error)
     return { success: false as const, error: message }
   }
@@ -180,27 +176,24 @@ export async function createBooking(data: {
   amountPaid: number
 }) {
   try {
-    // 1) Guardar en BD
-    const { data: inserted, error } = await supabase
-      .from('bookings')
-      .insert({
-        service_id: data.serviceId,
-        service_name: data.serviceName,
-        client_name: data.clientName,
-        client_email: data.clientEmail,
-        client_phone: data.clientPhone,
-        start_time: data.startTime.toISOString(),
-        end_time: data.endTime.toISOString(),
-        amount_total: data.amountTotal,
-        amount_paid: data.amountPaid,
-        amount_pending: data.amountTotal - data.amountPaid,
-        status: 'confirmed_trust', // reserva manual sin pago
+    // 1) Guardar en BD (Neon vía Prisma)
+    const inserted = await prisma.booking.create({
+      data: {
+        serviceId: data.serviceId,
+        serviceName: data.serviceName,
+        clientName: data.clientName,
+        clientEmail: data.clientEmail,
+        clientPhone: data.clientPhone || null,
+        startTime: data.startTime,
+        endTime: data.endTime,
+        amountTotal: data.amountTotal,
+        amountPaid: data.amountPaid,
+        amountPending: data.amountTotal - data.amountPaid,
+        status: 'confirmed_trust',
         notes: 'Reserva Manual desde Admin',
-      })
-      .select('id')
-      .single()
-
-    if (error || !inserted) throw new Error(error?.message ?? 'Insert failed')
+      },
+      select: { id: true },
+    })
 
     const bookingId = inserted.id
 
@@ -225,112 +218,90 @@ export async function createBooking(data: {
       })
 
       if (calendarResult.success && calendarResult.eventId) {
-        await supabase
-          .from('bookings')
-          .update({ google_event_id: calendarResult.eventId })
-          .eq('id', bookingId)
+        await prisma.booking.update({
+          where: { id: bookingId },
+          data: { googleEventId: calendarResult.eventId },
+        })
       }
     } catch (err) {
       console.error('Error creando evento de calendario para reserva manual:', err)
-      // No hacemos throw: la reserva en BD sigue siendo válida
     }
 
     revalidatePath('/admin/calendar')
     return { success: true as const }
   } catch (error: unknown) {
     console.error('Error creando reserva manual:', error)
-    const message =
-      error instanceof Error ? error.message : 'Unknown error while creating manual booking'
+    const message = error instanceof Error ? error.message : 'Unknown error while creating manual booking'
     return { success: false as const, error: message }
   }
 }
 
-
-// --- ADMINISTRACIÓN ---
-// Define la estructura de los datos que vienen de Supabase
-interface BookingRow {
-  id: number
-  start_time: string
-  end_time: string
-  client_name: string
-  service_name: string
-  status: string
-  client_phone: string | null
-  amount_paid: number
-  amount_pending: number
-  notes: string | null
-}
-
 export async function fetchBookings() {
-  // 1. Obtenemos los datos (Supabase a veces devuelve 'any' si no tienes tipos generados)
-  const { data, error } = await supabase
-    .from('bookings')
-    .select('*')
-    .order('start_time', { ascending: true })
-
-  if (error || !data) return []
-
-  // 2. Aquí usamos la interfaz 'BookingRow' en lugar de 'any'
+  const data = await prisma.booking.findMany({
+    orderBy: { startTime: 'asc' },
+  })
+  type BookingRow = (typeof data)[number]
   return data.map((booking: BookingRow) => ({
     id: booking.id,
-    title: `${booking.client_name} - ${booking.service_name}`,
-    start: new Date(booking.start_time),
-    end: new Date(booking.end_time),
+    title: `${booking.clientName} - ${booking.serviceName}`,
+    start: new Date(booking.startTime),
+    end: new Date(booking.endTime),
     resource: {
       status: booking.status,
-      clientName: booking.client_name,
-      clientPhone: booking.client_phone || '', // Manejamos si viene null
-      amountPaid: booking.amount_paid,
-      amountPending: booking.amount_pending,
-      notes: booking.notes || '', // Manejamos si viene null
+      clientName: booking.clientName,
+      clientPhone: booking.clientPhone || '',
+      amountPaid: booking.amountPaid,
+      amountPending: booking.amountPending,
+      notes: booking.notes || '',
     },
   }))
 }
+
 export async function markAsPaid(bookingId: number, totalAmount: number) {
-  const { data, error } = await supabase
-    .from('bookings')
-    .update({
-      status: 'paid_full',
-      amount_paid: totalAmount,
-      amount_pending: 0,
+  try {
+    const updated = await prisma.booking.update({
+      where: { id: bookingId },
+      data: {
+        status: 'paid_full',
+        amountPaid: totalAmount,
+        amountPending: 0,
+      },
+      select: { googleEventId: true },
     })
-    .eq('id', bookingId)
-    .select('google_event_id')
-    .single()
 
-  if (error) return { success: false as const }
+    if (updated.googleEventId) {
+      const colorId = statusToColorId('paid_full')
+      await updateGoogleEventColor(updated.googleEventId, colorId)
+    }
 
-  // Actualizar color en Google Calendar → verde (paid_full)
-  if (data?.google_event_id) {
-    const colorId = statusToColorId('paid_full')
-    await updateGoogleEventColor(data.google_event_id, colorId)
+    revalidatePath('/admin/calendar')
+    return { success: true as const }
+  } catch (e) {
+    console.error('markAsPaid error:', e)
+    return { success: false as const }
   }
-
-  revalidatePath('/admin/calendar')
-  return { success: true as const }
 }
 
-
 export async function cancelBooking(bookingId: number) {
-  // 1) Leer google_event_id antes de borrar
-  const { data } = await supabase
-    .from('bookings')
-    .select('google_event_id')
-    .eq('id', bookingId)
-    .single()
+  try {
+    // 1) Leer googleEventId antes de borrar
+    const found = await prisma.booking.findUnique({
+      where: { id: bookingId },
+      select: { googleEventId: true },
+    })
 
-  const { error } = await supabase
-    .from('bookings')
-    .delete()
-    .eq('id', bookingId)
+    // 2) Borrar en BD
+    await prisma.booking.delete({ where: { id: bookingId } })
 
-  if (error) return { success: false as const }
+    // 3) Borrar también en Google Calendar
+    if (found?.googleEventId) {
+      await deleteGoogleEvent(found.googleEventId)
+    }
 
-  // 2) Borrar también en Google Calendar
-  if (data?.google_event_id) {
-    await deleteGoogleEvent(data.google_event_id)
+    revalidatePath('/admin/calendar')
+    return { success: true as const }
+  } catch (e) {
+    console.error('cancelBooking error:', e)
+    return { success: false as const }
   }
-
-  revalidatePath('/admin/calendar')
-  return { success: true as const }
 }

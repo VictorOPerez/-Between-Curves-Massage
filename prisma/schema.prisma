@@ -1,0 +1,38 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Booking {
+  id Int @id @default(autoincrement())
+
+  serviceId   String @map("service_id")
+  serviceName String @map("service_name")
+
+  clientName  String  @map("client_name")
+  clientEmail String  @map("client_email")
+  clientPhone String? @map("client_phone")
+
+  startTime DateTime @map("start_time")
+  endTime   DateTime @map("end_time")
+
+  amountTotal   Float @map("amount_total")
+  amountPaid    Float @map("amount_paid")
+  amountPending Float @map("amount_pending")
+
+  status String
+  notes  String?
+
+  googleEventId         String?   @map("google_event_id")
+  stripeSessionId       String?   @unique @map("stripe_session_id")
+  stripePaymentIntentId String?   @map("stripe_payment_intent_id")
+  stripeNotifiedAt      DateTime? @map("stripe_notified_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("bookings")
+}

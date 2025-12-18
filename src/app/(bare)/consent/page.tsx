@@ -90,7 +90,14 @@ export default function IntakePage() {
             uploadData.append('file', blob, fileName);
 
             const response = await fetch('/api/upload', { method: 'POST', body: uploadData });
-            if (!response.ok) throw new Error('Upload failed');
+            if (!response.ok) {
+                // 1. Leemos la respuesta del servidor antes de lanzar el error
+                const errorData = await response.json().catch(() => ({}));
+                console.error("Detalles del error del servidor:", errorData);
+
+                // 2. Usamos el mensaje real del servidor si existe
+                throw new Error(errorData.error || 'Upload failed');
+            }
 
             alert(lang === 'en' ? 'Success! Form saved.' : '¡Éxito! Formulario guardado.');
             setFormData(initialFormState);
@@ -337,7 +344,7 @@ export default function IntakePage() {
                                         canvasProps={{
                                             className: "w-full h-40 rounded",
                                             style: { touchAction: 'none' },
-                                            willReadFrequently: true
+
                                         } as CanvasHTMLAttributes<HTMLCanvasElement> & { willReadFrequently?: boolean }}
                                     />
                                 </div>
