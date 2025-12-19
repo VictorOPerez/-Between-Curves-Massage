@@ -1,0 +1,11 @@
+# Generated code
+src/generated/**
+
+# Next build output
+.next/**
+
+# Prisma migrations
+prisma/migrations/**
+
+# Node
+node_modules/**
