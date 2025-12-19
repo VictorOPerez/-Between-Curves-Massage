@@ -5,7 +5,7 @@ const CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL;
 const PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY;
 const IMPERSONATE_USER = process.env.GOOGLE_IMPERSONATE_USER;
 
-const GOOGLE_CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID || "primary";
+const GOOGLE_CALENDAR_ID = "primary";
 const DEFAULT_TZ = process.env.GOOGLE_CALENDAR_TZ || "America/New_York";
 
 let _auth: InstanceType<typeof google.auth.JWT> | null = null;
