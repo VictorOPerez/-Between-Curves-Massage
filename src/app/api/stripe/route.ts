@@ -95,6 +95,8 @@ export async function POST(req: Request) {
         bookingId = created.id;
         googleEventId = created.googleEventId;
         notifiedAt = created.stripeNotifiedAt;
+        console.log("✅ Booking creado en DB con ID:", bookingId);
+
     }
 
     // 5) Crear evento en Google Calendar SOLO si falta googleEventId (retry-safe)

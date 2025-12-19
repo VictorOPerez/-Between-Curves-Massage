@@ -1,31 +1,25 @@
 // src/lib/googleCalendar.ts
 import { google } from "googleapis";
 
-// ✅ Reutilizamos las mismas env vars que usas en Drive/Gmail
 const CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL;
 const PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY;
 const IMPERSONATE_USER = process.env.GOOGLE_IMPERSONATE_USER;
 
-// Puede ser "primary" o el email del calendar owner, o un calendarId específico compartido
 const GOOGLE_CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID || "primary";
 const DEFAULT_TZ = process.env.GOOGLE_CALENDAR_TZ || "America/New_York";
 
-// Scope recomendado (completo para evitar problemas con patch/delete/guests)
-const SCOPES = ["https://www.googleapis.com/auth/calendar"];
-
-// Cache (para no re-crear clientes en cada llamada)
 let _auth: InstanceType<typeof google.auth.JWT> | null = null;
 let _calendar: ReturnType<typeof google.calendar> | null = null;
 
-function getCalendarClient() {
+function getClient() {
     if (!CLIENT_EMAIL || !PRIVATE_KEY || !IMPERSONATE_USER) return null;
 
     if (!_auth) {
         _auth = new google.auth.JWT({
             email: CLIENT_EMAIL,
             key: PRIVATE_KEY.replace(/\\n/g, "\n"),
-            scopes: SCOPES,
-            subject: IMPERSONATE_USER, // ✅ impersonación
+            scopes: ["https://www.googleapis.com/auth/calendar"],
+            subject: IMPERSONATE_USER,
         });
     }
 
@@ -36,17 +30,16 @@ function getCalendarClient() {
     return { auth: _auth, calendar: _calendar };
 }
 
-// 🎨 Estado → colorId
 export function statusToColorId(status: string): string | undefined {
     switch (status) {
         case "confirmed_stripe":
-            return "5"; // amarillo (10%)
+            return "5";
         case "confirmed_trust":
-            return "4"; // rojo/naranja
+            return "4";
         case "paid_full":
-            return "2"; // verde
+            return "2";
         case "completed":
-            return "10"; // azul fuerte
+            return "10";
         default:
             return undefined;
     }
@@ -63,109 +56,80 @@ export interface CalendarEventInput {
     colorId?: string;
 }
 
-export async function createGoogleCalendarEvent(
-    input: CalendarEventInput
-): Promise<{ success: boolean; eventId?: string; error?: string }> {
+export async function createGoogleCalendarEvent(input: CalendarEventInput) {
     try {
-        const client = getCalendarClient();
-        if (!client) {
-            return { success: false, error: "Google Calendar no está configurado (env missing)" };
-        }
+        const c = getClient();
+        if (!c) return { success: false, error: "Google Calendar env missing" as const };
 
-        // ✅ Autoriza JWT (importante)
-        await client.auth.authorize();
+        await c.auth.authorize();
 
-        const event = {
-            summary: input.summary,
-            description:
-                input.description ??
-                `Cliente: ${input.clientName}\nEmail: ${input.clientEmail}${input.clientPhone ? `\nTeléfono: ${input.clientPhone}` : ""
-                }`,
-            start: {
-                dateTime: input.start.toISOString(),
-                timeZone: DEFAULT_TZ,
-            },
-            end: {
-                dateTime: input.end.toISOString(),
-                timeZone: DEFAULT_TZ,
-            },
-            attendees: [
-                {
-                    email: input.clientEmail,
-                    displayName: input.clientName,
-                },
-            ],
-            reminders: {
-                useDefault: false,
-                overrides: [
-                    { method: "email", minutes: 24 * 60 },
-                    { method: "popup", minutes: 60 },
-                ],
-            },
-            colorId: input.colorId,
-        };
-
-        const res = await client.calendar.events.insert({
+        const res = await c.calendar.events.insert({
             calendarId: GOOGLE_CALENDAR_ID,
-            requestBody: event,
-            // Si quieres que Google mande invitación al cliente (opcional):
-            // sendUpdates: "all",
+            requestBody: {
+                summary: input.summary,
+                description:
+                    input.description ??
+                    `Cliente: ${input.clientName}\nEmail: ${input.clientEmail}${input.clientPhone ? `\nTeléfono: ${input.clientPhone}` : ""
+                    }`,
+                start: { dateTime: input.start.toISOString(), timeZone: DEFAULT_TZ },
+                end: { dateTime: input.end.toISOString(), timeZone: DEFAULT_TZ },
+                attendees: [{ email: input.clientEmail, displayName: input.clientName }],
+                reminders: {
+                    useDefault: false,
+                    overrides: [
+                        { method: "email", minutes: 24 * 60 },
+                        { method: "popup", minutes: 60 },
+                    ],
+                },
+                colorId: input.colorId,
+            },
         });
 
-        return { success: true, eventId: res.data.id ?? undefined };
+        return { success: true as const, eventId: res.data.id ?? undefined };
     } catch (err) {
         console.error("[GoogleCalendar] Error creando evento:", err);
-        const msg = err instanceof Error ? err.message : "Unknown calendar error";
-        return { success: false, error: msg };
+        const msg = err instanceof Error ? err.message : String(err);
+        return { success: false as const, error: msg };
     }
 }
 
-export async function updateGoogleEventColor(
-    eventId: string,
-    colorId?: string
-): Promise<{ success: boolean; error?: string }> {
+export async function updateGoogleEventColor(eventId: string, colorId?: string) {
     try {
-        const client = getCalendarClient();
-        if (!client) {
-            return { success: false, error: "Google Calendar no está configurado (env missing)" };
-        }
+        const c = getClient();
+        if (!c) return { success: false, error: "Google Calendar env missing" as const };
 
-        await client.auth.authorize();
+        await c.auth.authorize();
 
-        await client.calendar.events.patch({
+        await c.calendar.events.patch({
             calendarId: GOOGLE_CALENDAR_ID,
             eventId,
             requestBody: { colorId },
         });
 
-        return { success: true };
+        return { success: true as const };
     } catch (err) {
         console.error("[GoogleCalendar] Error actualizando color:", err);
-        const msg = err instanceof Error ? err.message : "Unknown calendar error";
-        return { success: false, error: msg };
+        const msg = err instanceof Error ? err.message : String(err);
+        return { success: false as const, error: msg };
     }
 }
 
-export async function deleteGoogleEvent(
-    eventId: string
-): Promise<{ success: boolean; error?: string }> {
+export async function deleteGoogleEvent(eventId: string) {
     try {
-        const client = getCalendarClient();
-        if (!client) {
-            return { success: false, error: "Google Calendar no está configurado (env missing)" };
-        }
+        const c = getClient();
+        if (!c) return { success: false, error: "Google Calendar env missing" as const };
 
-        await client.auth.authorize();
+        await c.auth.authorize();
 
-        await client.calendar.events.delete({
+        await c.calendar.events.delete({
             calendarId: GOOGLE_CALENDAR_ID,
             eventId,
         });
 
-        return { success: true };
+        return { success: true as const };
     } catch (err) {
         console.error("[GoogleCalendar] Error borrando evento:", err);
-        const msg = err instanceof Error ? err.message : "Unknown calendar error";
-        return { success: false, error: msg };
+        const msg = err instanceof Error ? err.message : String(err);
+        return { success: false as const, error: msg };
     }
 }
