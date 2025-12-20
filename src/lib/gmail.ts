@@ -49,7 +49,9 @@ export async function sendEmail(to: string, subject: string, htmlBody: string) {
 
         // (Optional) If you ever put accents/emojis in the From display name, encode it too.
         // Here it's ASCII, so no need. Left as-is.
-        const fromHeader = `"Curves Massages" <${IMPERSONATE_USER}>`;
+        const FROM_EMAIL = process.env.MAIL_FROM || process.env.GOOGLE_IMPERSONATE_USER!;
+        const fromHeader = `"Curves Massages" <${FROM_EMAIL}>`;
+
 
         // Build RFC 5322 raw message
         const emailLines = [
