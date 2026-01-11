@@ -369,6 +369,7 @@ function BookingContent() {
     const [availableSlots, setAvailableSlots] = useState<string[]>([])
     const [isLoadingSlots, setIsLoadingSlots] = useState(false)
     const [isTimePickerOpen, setIsTimePickerOpen] = useState(false)
+    const [isHeroImgLoading, setIsHeroImgLoading] = useState(true)
 
     useEffect(() => {
         const serviceSlug = searchParams.get('service')
@@ -397,6 +398,7 @@ function BookingContent() {
     }, [selectedDate, service])
 
     const selectService = (newService: ServiceData) => {
+        setIsHeroImgLoading(true)
         setService(newService)
         setIsServiceMenuOpen(false)
         setSelectedTime(null)
@@ -471,7 +473,13 @@ function BookingContent() {
 
             {/* COLUMNA IZQUIERDA (Igual) */}
             <div className="w-full md:w-5/12 lg:w-1/3 bg-[#1D332E] text-white relative flex flex-col justify-end overflow-hidden shadow-2xl z-10">
-                <img src={service.image} alt={serviceCopy.title} className="absolute inset-0 w-full h-full object-cover opacity-60 transition-transform duration-700 ease-in-out key={service.id}" />
+                <img src={service.image} alt={serviceCopy.title} onLoad={() => setIsHeroImgLoading(false)} onError={() => setIsHeroImgLoading(false)} className="absolute inset-0 w-full h-full object-cover opacity-60 transition-transform duration-700 ease-in-out key={service.id}" />
+                {isHeroImgLoading && (
+                    <div className="absolute inset-0 z-20 flex items-center justify-center">
+                        <div className="w-12 h-12 border-4 border-[#2DD4BF] border-t-transparent rounded-full animate-spin" />
+                    </div>
+                )}
+
                 <div className="absolute inset-0 bg-gradient-to-t from-[#13221E] via-[#13221E]/20 to-transparent"></div>
                 <div className="relative z-10 p-8 md:p-12">
                     <div className="inline-flex items-center gap-2 bg-white/10 px-4 py-1.5 rounded-full text-[#D4B886] text-[10px] font-bold tracking-[0.2em] uppercase mb-6 backdrop-blur-md border border-white/10 shadow-lg">
