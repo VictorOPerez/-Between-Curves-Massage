@@ -14,6 +14,7 @@ import { revalidatePath } from 'next/cache'
 import { SERVICES_DB } from '@/lib/services'
 import { addMinutes, setHours, setMinutes, isBefore, startOfDay, endOfDay, parseISO } from 'date-fns'
 import Stripe from 'stripe'
+import { getGbpAccessToken } from '@/lib/gbpAuth'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {})
 
@@ -304,4 +305,25 @@ export async function cancelBooking(bookingId: number) {
     console.error('cancelBooking error:', e)
     return { success: false as const }
   }
+}
+
+
+
+let _cache: { at: number; data: any } | null = null
+
+export async function gbpListAccounts() {
+  if (_cache && Date.now() - _cache.at < 60_000) return _cache.data
+
+  const token = await getGbpAccessToken()
+  const r = await fetch('https://mybusinessaccountmanagement.googleapis.com/v1/accounts', {
+    headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
+    cache: 'no-store',
+  })
+
+  const text = await r.text()
+  if (!r.ok) throw new Error(`GBP accounts error ${r.status}: ${text.slice(0, 500)}`)
+
+  const data = JSON.parse(text)
+  _cache = { at: Date.now(), data }
+  return data
 }
