@@ -309,9 +309,9 @@ export async function cancelBooking(bookingId: number) {
 
 
 
-let _cache: { at: number; data: any } | null = null
+let _cache: { at: number; data: unknown } | null = null
 
-export async function gbpListAccounts() {
+export async function gbpListAccounts(): Promise<unknown> {
   if (_cache && Date.now() - _cache.at < 60_000) return _cache.data
 
   const token = await getGbpAccessToken()
@@ -323,7 +323,7 @@ export async function gbpListAccounts() {
   const text = await r.text()
   if (!r.ok) throw new Error(`GBP accounts error ${r.status}: ${text.slice(0, 500)}`)
 
-  const data = JSON.parse(text)
+  const data: unknown = JSON.parse(text)
   _cache = { at: Date.now(), data }
   return data
 }
