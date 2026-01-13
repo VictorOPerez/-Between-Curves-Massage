@@ -313,12 +313,19 @@ let _cache: { at: number; data: unknown } | null = null
 
 export async function gbpListAccounts(): Promise<unknown> {
   if (_cache && Date.now() - _cache.at < 60_000) return _cache.data
+  const accountId = "118043222469636130633"
+  const locationId = "10107957374442907314"
+
+  const url =
+    `https://mybusiness.googleapis.com/v4/accounts/${accountId}/locations/${locationId}/reviews` +
+    `?pageSize=50&orderBy=updateTime%20desc`
 
   const token = await getGbpAccessToken()
-  const r = await fetch('https://mybusinessaccountmanagement.googleapis.com/v1/accounts', {
-    headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
-    cache: 'no-store',
-  })
+  const r = await fetch(
+    url,
+    { headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' }, cache: 'no-store' }
+  )
+
 
   const text = await r.text()
   if (!r.ok) throw new Error(`GBP accounts error ${r.status}: ${text.slice(0, 500)}`)

@@ -15,7 +15,7 @@ type Card = {
 export function InfiniteMovingCards({
     items,
     direction = "left",
-    speed = "fast",
+    speed = "slow",
     pauseOnHover = true,
     className,
 }: {
@@ -51,7 +51,7 @@ export function InfiniteMovingCards({
             "--animation-direction",
             direction === "left" ? "forwards" : "reverse"
         );
-        const dur = speed === "fast" ? "20s" : speed === "normal" ? "40s" : "80s";
+        const dur = speed === "fast" ? "20s" : speed === "normal" ? "40s" : "160s";
         containerRef.current.style.setProperty("--animation-duration", dur);
     }, [direction, speed]);
 
@@ -120,7 +120,7 @@ export function InfiniteMovingCards({
                                 <Image src="/images/icons/google.png" alt="" width={25} height={25} />
                                 <div className="flex gap-2">
                                     <a
-                                        href="#"
+                                        href="https://share.google/FebmCpzBhgBcuiBfq"
                                         className="text-sm font-normal leading-[1.6] text-gray-300 hover:text-white/90 transition"
                                     >
                                         Read full review

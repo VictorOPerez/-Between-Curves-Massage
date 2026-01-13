@@ -90,23 +90,23 @@ export default function Footer() {
                         <p>
                             Email:{" "}
                             <a
-                                href="mailto:hello@betweencurvesmassage.com"
+                                href="mailto:contact@curvesmassages.com"
                                 className="font-semibold"
                                 style={{ color: "var(--gold-strong)" }}
                             >
-                                hello@betweencurvesmassage.com
+                                contact@curvesmassages.com.com
                             </a>
                         </p>
                         <p>
                             Instagram:{" "}
                             <a
-                                href="https://instagram.com/betweencurvesmassage"
+                                href="https://instagram.com/curvesmassages.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="font-semibold"
                                 style={{ color: "var(--gold-strong)" }}
                             >
-                                @betweencurvesmassage
+                                @curvesmassages.com
                             </a>
                         </p>
 
@@ -116,13 +116,13 @@ export default function Footer() {
                         <p className="text-center">
                             Address:{" "}
                             <a
-                                href="https://maps.google.com/?q=4311%20W%20Waters%20Ave,%20Tampa,%20FL"
+                                href="https://maps.google.com/?q=4311%20W%20Waters%20Ave%20suite%20602,%20Tampa,%20FL%2033614"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="font-semibold"
                                 style={{ color: "var(--gold-strong)" }}
                             >
-                                4311 W Waters Ave, Tampa, FL
+                                4311 W Waters Ave suite 602, Tampa, FL 33614
                             </a>
                         </p>
                         <p>Hours: Mon–Sun 9:00–20:00 (by appointment)</p>
