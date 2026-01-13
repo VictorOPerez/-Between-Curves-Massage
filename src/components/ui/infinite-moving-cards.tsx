@@ -15,7 +15,7 @@ type Card = {
 export function InfiniteMovingCards({
     items,
     direction = "left",
-    speed = "slow",
+    speed = "fast",
     pauseOnHover = true,
     className,
 }: {
@@ -51,7 +51,7 @@ export function InfiniteMovingCards({
             "--animation-direction",
             direction === "left" ? "forwards" : "reverse"
         );
-        const dur = speed === "fast" ? "20s" : speed === "normal" ? "40s" : "160s";
+        const dur = speed === "fast" ? "20s" : speed === "normal" ? "40s" : "80s";
         containerRef.current.style.setProperty("--animation-duration", dur);
     }, [direction, speed]);
 
