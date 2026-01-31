@@ -537,7 +537,7 @@ function BookingContent() {
                     </div>
 
                     {/* SELECTOR SERVICIO */}
-                    <div className="flex items-end justify-between mb-8 border-b border-gray-200 pb-6 relative">
+                    <div className="flex items-end flex-col md:flex-row md:justify-between mb-8 border-b border-gray-200 pb-6 relative">
                         <div className="flex-1 min-w-0">
                             <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">
                                 {t.booking}
@@ -547,38 +547,44 @@ function BookingContent() {
                             <button
                                 type="button"
                                 onClick={() => setIsServiceMenuOpen(true)}
-                                className="group w-full flex items-center justify-between gap-3 text-left
-                 rounded-2xl px-4 py-3
-                 bg-[#2DD4BF]/10 border border-[#2DD4BF]/30
-                 shadow-sm shadow-[#2DD4BF]/10
-                 hover:shadow-md hover:shadow-[#2DD4BF]/20 hover:border-[#2DD4BF]/45
-                 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF]/30"
+                                className="group w-full min-w-0 overflow-hidden flex items-center justify-between gap-3 text-left
+    rounded-2xl px-4 py-3
+    bg-[#2DD4BF]/10 border border-[#2DD4BF]/30
+    shadow-sm shadow-[#2DD4BF]/10
+    hover:shadow-md hover:shadow-[#2DD4BF]/20 hover:border-[#2DD4BF]/45
+    transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF]/30"
                                 aria-label={t.changeMassageAria}
                             >
-                                <span className="truncate text-2xl md:text-3xl font-serif text-[#25413A] relative">
-                                    {serviceCopy.title}
-                                    {/* underline elegante al hover */}
+                                {/* ✅ IZQUIERDA (título) */}
+                                <div className="min-w-0 flex-1">
                                     <span
-                                        aria-hidden
-                                        className="absolute -bottom-1 left-0 h-[2px] w-full bg-gradient-to-r from-transparent via-[#2DD4BF] to-transparent
-                     opacity-0 group-hover:opacity-100 transition-opacity"
-                                    />
-                                </span>
+                                        className="block text-xl sm:text-2xl md:text-3xl font-serif text-[#25413A] leading-tight"
+                                        style={{
+                                            display: "-webkit-box",
+                                            WebkitLineClamp: 2,
+                                            WebkitBoxOrient: "vertical",
+                                            overflow: "hidden",
+                                        }}
+                                    >
+                                        {serviceCopy.title}
+                                    </span>
+                                </div>
 
+                                {/* ✅ DERECHA (chip + flecha) */}
                                 <span className="flex items-center gap-2 shrink-0">
-                                    {/* Chip verde fuerte */}
                                     <span className="inline-flex items-center rounded-full text-[10px] font-bold tracking-widest uppercase
-                         px-2.5 py-1 bg-[#2DD4BF] text-[#13221E]
-                         shadow-sm shadow-[#2DD4BF]/30">
+      px-2.5 py-1 bg-[#2DD4BF] text-[#13221E]
+      shadow-sm shadow-[#2DD4BF]/30"
+                                    >
                                         {t.moreMassages}
                                     </span>
 
-                                    {/* Flecha animada siempre */}
                                     <span className="motion-safe:animate-bounce">
                                         <ChevronDownIcon />
                                     </span>
                                 </span>
                             </button>
+
 
                             {/* Hint + puntico (sin caja extra) */}
                             <p className="mt-2 text-xs text-gray-500 flex items-center gap-2">
@@ -586,11 +592,45 @@ function BookingContent() {
                                 <span className="inline-flex h-2 w-2 rounded-full bg-[#2DD4BF] animate-pulse" />
                             </p>
                         </div>
+                        {/* ✅ BLOQUE PRECIO (reemplaza el anterior) */}
+                        <div className="order-first md:order-none w-full md:w-auto mb-4 md:mb-0 md:pl-4 shrink-0">
+                            <div className="w-full md:w-[260px] rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                                <div className="flex items-end justify-between md:block">
+                                    {/* TOTAL */}
+                                    <div className="min-w-0">
+                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.22em]">
+                                            {lang === "es" ? "TOTAL" : "TOTAL"}
+                                        </p>
+                                        <p className="text-4xl font-extrabold text-[#25413A] leading-none">
+                                            ${Number(service.fullPrice).toFixed(0)}
+                                        </p>
+                                    </div>
 
-                        <div className="text-right hidden sm:block pl-4 shrink-0">
-                            <p className="text-xs text-gray-400 uppercase">{t.investment}</p>
-                            <p className="text-2xl font-bold text-[#25413A]">${service.fullPrice}</p>
+                                    {/* DEPÓSITO */}
+                                    <div className="text-right md:text-left">
+                                        <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#2DD4BF]">
+                                            {lang === "es" ? "A PAGAR AHORA" : "PAY NOW"}
+                                        </p>
+                                        <p className="text-sm font-bold text-[#13221E] leading-tight">
+                                            ${depositAmount.toFixed(2)}{" "}
+                                            <span className="text-xs font-medium text-gray-500">
+                                                {lang === "es" ? "depósito (10%)" : "deposit (10%)"}
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Línea resaltada opcional (queda pro en móvil) */}
+                                <div className="mt-3 rounded-xl bg-[#2DD4BF]/10 border border-[#2DD4BF]/20 px-3 py-2">
+                                    <p className="text-xs font-semibold text-[#25413A]">
+                                        {lang === "es"
+                                            ? "Depósito hoy • resto se paga en el spa"
+                                            : "Deposit today • rest paid at the spa"}
+                                    </p>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
 
                     {/* MODAL DE SERVICIOS */}

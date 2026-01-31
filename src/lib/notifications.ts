@@ -5,6 +5,14 @@ import { sendEmail } from "@/lib/gmail";
 // ----------------------------------------------------------------------
 // 1) HTML templates
 // ----------------------------------------------------------------------
+const BUSINESS_ADDRESS =
+  process.env.BUSINESS_ADDRESS || "4311 W Waters Ave suite 602, Tampa, FL 33614";
+
+const BUSINESS_MAP_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  BUSINESS_ADDRESS
+)}`;
+
+
 
 const getClientEmailTemplate = (name: string, date: string, time: string, service: string) => `
 <div style="font-family: system-ui, -apple-system, sans-serif; color: #25413A; max-width: 600px; margin: 0 auto;">
@@ -18,8 +26,14 @@ const getClientEmailTemplate = (name: string, date: string, time: string, servic
     <div style="background-color: #f0fdfa; padding: 15px; border-radius: 8px; margin: 20px 0;">
       <p style="margin: 5px 0;"><strong>Service:</strong> ${service}</p>
       <p style="margin: 5px 0;"><strong>Date:</strong> ${date}</p>
-      <p style="margin: 5px 0;"><strong>Time:</strong> ${time}</p>
-      <p style="margin: 5px 0;"><strong>Location:</strong> 801 E Semoran Blvd</p>
+      <p style="margin: 5px 0;"><strong>Time:</strong> ${time} (ET)</p>
+     <p style="margin: 5px 0;">
+  <strong>Location:</strong>
+  <a href="${BUSINESS_MAP_URL}" style="color:#1d4ed8; text-decoration:underline;">
+    ${BUSINESS_ADDRESS}
+  </a>
+</p>
+
     </div>
 
     <p style="font-size: 13px; color: #64748b;">

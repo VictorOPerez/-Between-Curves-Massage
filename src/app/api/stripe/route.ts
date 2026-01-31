@@ -137,16 +137,21 @@ export async function POST(req: Request) {
 
     // 6) Notificaciones SOLO si no se han enviado (retry-safe)
     if (!notifiedAt) {
-        const dateStr = startTime.toLocaleDateString("es-ES", {
+        const TZ = process.env.BUSINESS_TIMEZONE || "America/New_York"; // Tampa = ET
+
+        const dateStr = new Intl.DateTimeFormat("es-ES", {
+            timeZone: TZ,
             weekday: "long",
             day: "numeric",
             month: "long",
-        });
+        }).format(startTime);
 
-        const timeStr = startTime.toLocaleTimeString("es-ES", {
+        const timeStr = new Intl.DateTimeFormat("es-ES", {
+            timeZone: TZ,
             hour: "2-digit",
             minute: "2-digit",
-        });
+            hour12: false,
+        }).format(startTime);
 
         await sendBookingNotifications(
             clientEmail,
