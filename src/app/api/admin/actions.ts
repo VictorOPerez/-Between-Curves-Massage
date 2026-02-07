@@ -121,6 +121,24 @@ export async function createStripeSession(data: {
   amountPaid: number
 }) {
   try {
+
+    const SPA_TZ = 'America/New_York' // Florida (ET)
+
+    const dateLabel = new Intl.DateTimeFormat('es-ES', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      timeZone: SPA_TZ,
+    }).format(data.startTime)
+
+    const timeLabel = new Intl.DateTimeFormat('es-ES', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: SPA_TZ,
+    }).format(data.startTime)
+
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       phone_number_collection: { enabled: true },
@@ -130,14 +148,7 @@ export async function createStripeSession(data: {
             currency: 'usd',
             product_data: {
               name: `Depósito: ${data.serviceName}`,
-              description: `Reserva para el ${data.startTime.toLocaleDateString('es-ES', {
-                weekday: 'long',
-                day: 'numeric',
-                month: 'long',
-              })} a las ${data.startTime.toLocaleTimeString('es-ES', {
-                hour: '2-digit',
-                minute: '2-digit',
-              })}`,
+              description: `Reserva para el ${dateLabel} a las ${timeLabel}`,
             },
             unit_amount: Math.round(data.amountPaid * 100),
           },
