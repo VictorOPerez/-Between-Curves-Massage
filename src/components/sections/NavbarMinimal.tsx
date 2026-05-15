@@ -6,6 +6,7 @@ import { Home, Phone, CalendarDays } from "lucide-react"; // 👈 añadí Calend
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import LogoBCM from "../layout/LogoBCM";
+import { BOOKING_URL } from "@/lib/constants";
 
 type Props = {
     logoSrc?: string;
@@ -18,7 +19,7 @@ export default function NavbarMinimal({
     logoSrc = "/images/logo.png",
     logoAlt = "MagiSpa",
     contactHref = "/contact",
-    bookHref = "/book",
+    bookHref = BOOKING_URL,
 }: Props) {
     const pathname = usePathname();
 
@@ -57,9 +58,11 @@ export default function NavbarMinimal({
 
                     {/* Botones derecha: Book + Contacto */}
                     <div className="flex items-center gap-2">
-                        {/* BOOK */}
+                        {/* BOOK — external link to Booksy */}
                         <Link
                             href={bookHref}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="
                 inline-flex items-center gap-2 h-10 px-4 rounded-full
                 font-medium text-sm

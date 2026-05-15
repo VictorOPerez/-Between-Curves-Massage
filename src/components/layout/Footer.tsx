@@ -90,23 +90,35 @@ export default function Footer() {
                         <p>
                             Email:{" "}
                             <a
-                                href="mailto:contact@curvesmassages.com"
+                                href="mailto:hello@betweencurvesmassage.com"
                                 className="font-semibold"
                                 style={{ color: "var(--gold-strong)" }}
                             >
-                                contact@curvesmassages.com.com
+                                hello@betweencurvesmassage.com
                             </a>
                         </p>
                         <p>
                             Instagram:{" "}
                             <a
-                                href="https://instagram.com/curvesmassages.com"
+                                href="https://instagram.com/betweencurvesmassage"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="font-semibold"
                                 style={{ color: "var(--gold-strong)" }}
                             >
-                                @curvesmassages.com
+                                @betweencurvesmassage
+                            </a>
+                        </p>
+                        <p>
+                            Book:{" "}
+                            <a
+                                href="https://betweencurvesmassage.booksy.com/a/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-semibold"
+                                style={{ color: "var(--gold-strong)" }}
+                            >
+                                betweencurvesmassage.booksy.com
                             </a>
                         </p>
 

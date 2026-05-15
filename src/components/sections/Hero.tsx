@@ -5,6 +5,7 @@ import Section from "../ui/Section";
 import clsx from "clsx";
 import HeroImageSlot from "./HeroImageSlot";
 import TrustBadges from "./TrustBadges";
+import { BOOKING_URL } from "@/lib/constants";
 
 export default function Hero() {
     return (
@@ -29,12 +30,10 @@ export default function Hero() {
                         handle everything: table, sheets, and aromatherapy.
                     </p>
 
-                    {/* CTAs (desktop) */}
+                    {/* CTAs (desktop) — booking goes to Booksy */}
                     <div className="hidden mt-6 md:flex flex-col sm:flex-row gap-3">
                         <a
-                            href={`https://wa.me/18133776678?text=${encodeURIComponent(
-                                "Hi 👋 I’d like to book an in-home massage."
-                            )}`}
+                            href={BOOKING_URL}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-medium
@@ -60,13 +59,11 @@ export default function Hero() {
                     </div>
                 </figure>
 
-                {/* CTA — bottom on mobile */}
+                {/* CTA — bottom on mobile, booking goes to Booksy */}
                 <div className="px-6 block relative md:hidden order-3 lg:col-span-5 lg:col-start-1 lg:row-start-2 mt-4 mb-8 z-[999]">
                     <div className="flex items-start sm:flex-row sm:items-center gap-3">
                         <a
-                            href={`https://wa.me/18133776678?text=${encodeURIComponent(
-                                "Hi 👋 I’d like to book an in-home massage."
-                            )}`}
+                            href={BOOKING_URL}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-medium

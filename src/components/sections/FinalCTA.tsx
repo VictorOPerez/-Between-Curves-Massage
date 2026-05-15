@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Section from "../ui/Section";
 import clsx from "clsx";
+import { BOOKING_URL } from "@/lib/constants";
 
 type FinalCtaProps = {
     title?: string;
@@ -18,6 +19,8 @@ type FinalCtaProps = {
     whatsappPhone?: string;
     /** Pre-filled message */
     whatsappText?: string;
+    /** When true, the main CTA links to Booksy instead of WhatsApp */
+    useBooking?: boolean;
     className?: string;
 };
 
@@ -41,10 +44,16 @@ export default function FinalCTA({
     note = "Studio: 4311 W Waters Ave, Tampa, FL — Free parking (if available).",
     whatsappPhone = "+1 (813) 377-6678",
     whatsappText = "Hi! I’d like to book a session (studio or in-home).",
+    useBooking = true,
     className,
 }: FinalCtaProps) {
-    const useWhatsApp = Boolean(whatsappPhone);
-    const href = useWhatsApp ? toWaLink(whatsappPhone!, whatsappText) : buttonHref;
+    const useWhatsApp = !useBooking && Boolean(whatsappPhone);
+    const isExternal = useBooking || useWhatsApp;
+    const href = useBooking
+        ? BOOKING_URL
+        : useWhatsApp
+            ? toWaLink(whatsappPhone!, whatsappText)
+            : buttonHref;
 
     return (
         <Section bleed bg="none" maxW="7xl" py="xl" className={className}>
@@ -87,8 +96,8 @@ export default function FinalCTA({
                     <div className="md:text-right">
                         <Link
                             href={href}
-                            target={useWhatsApp ? "_blank" : undefined}
-                            rel={useWhatsApp ? "noopener noreferrer" : undefined}
+                            target={isExternal ? "_blank" : undefined}
+                            rel={isExternal ? "noopener noreferrer" : undefined}
                             className={clsx(
                                 "inline-flex items-center justify-center rounded-full px-6 py-4",
                                 "font-medium transition",
