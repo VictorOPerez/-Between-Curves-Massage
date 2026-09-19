@@ -1,0 +1,18 @@
+.git/
+.next/
+node_modules/
+public/book/
+public/gallery/
+public/programa/
+public/review/
+public/steps/
+public/images/gallery/
+public/images/programa/
+public/images/review/
+public/images/steps/
+public/images/aseo.png
+public/images/Cupping.png
+public/images/deep tese.png
+public/images/foot.png
+public/images/hot ston.png
+public/images/Swedish Massage.png
