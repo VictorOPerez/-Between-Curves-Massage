@@ -89,7 +89,9 @@ export interface IntakeFormData {
     };
     massageFrequency: 'first_time' | 'occasionally' | 'regularly' | 'rarely' | '';
 
-    // Signature Section (Solo para el PDF, no se guarda en estado)
+    // Consentimiento y firma
+    consentAccepted: boolean;
+    photoConsent: boolean | null;
     signatureDate?: string;
 }
 

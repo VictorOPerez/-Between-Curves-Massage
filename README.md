@@ -34,3 +34,34 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Protected consent form
+
+The `/consent` form and `/api/upload` endpoint require a server-validated private link. Configure these environment variables locally and in the deployment provider:
+
+```env
+CONSENT_LINK_TOKEN_HASH=<sha256 hash of the private link token>
+CONSENT_SESSION_SECRET=<long random signing secret>
+```
+
+Generate the values without storing the plain access code in the repository:
+
+```powershell
+node -e "const c=require('crypto'); const token=c.randomBytes(32).toString('base64url'); console.log('TOKEN='+token); console.log('HASH='+c.createHash('sha256').update(token).digest('hex'))"
+node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
+```
+
+The first command produces the private token and `CONSENT_LINK_TOKEN_HASH`; the second produces `CONSENT_SESSION_SECRET`. Share `/consent/open?token=TOKEN` with clients. The server validates it, creates the secure session, and immediately redirects to the clean `/consent` URL. After changing either environment value, redeploy the application. Existing consent sessions expire after eight hours and become invalid immediately if the session secret changes.
+
+## Google Drive consent storage
+
+Signed massage and aesthetics PDFs are generated in the browser and sent to the protected `/api/upload` backend. The backend validates the session and PDF, creates a server-controlled file name and uploads it to the configured private Drive folder.
+
+```env
+GOOGLE_CLIENT_EMAIL=<service-account-email>
+GOOGLE_PRIVATE_KEY=<service-account-private-key>
+GOOGLE_DRIVE_FOLDER_ID2=<destination-folder-id>
+GOOGLE_IMPERSONATE_USER=<optional-workspace-user>
+```
+
+Share the destination folder with `GOOGLE_CLIENT_EMAIL`. `GOOGLE_IMPERSONATE_USER` is optional; use it only when the Google Workspace domain has enabled domain-wide delegation for the service account. Each uploaded file includes the consent ID, type, language, document version and reception timestamp as private Drive metadata.

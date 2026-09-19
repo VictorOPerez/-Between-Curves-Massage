@@ -11,6 +11,15 @@ const en = {
     medicalHistoryTitle: "MEDICAL HISTORY",
     massageInfoTitle: "MASSAGE INFORMATION",
     consentTitle: "CONSENT & RELEASE",
+    photoConsentTitle: "OPTIONAL PHOTO & MEDIA CONSENT",
+    form_intro: "A thoughtful first step toward a massage experience tailored to you.",
+    private_badge: "Private form",
+    time_badge: "5–7 minutes",
+    personal_description: "Tell us how to contact you and who we should reach in an emergency.",
+    medical_description: "Share anything that may help us provide a safer, more comfortable session.",
+    massage_description: "Choose the areas, techniques and outcomes that matter most to you.",
+    consent_description: "Review the terms, make your optional media choice and sign below.",
+    signature_hint: "Use your finger or pointer to sign inside the box.",
 
     // Labels Personal Info
     label_name: "Name:",
@@ -74,14 +83,25 @@ const en = {
     legal_p2: "I acknowledge that massage therapy involves physical manipulation that may pose certain risks, including soreness, bruising, or allergic reactions to oils or lotions. I am responsible for informing the therapist of any medical conditions, allergies, or sensitivities I may have.",
     legal_p3: "By signing this consent form, I release Between Curves Massage from any liability for accidents, injuries, or damages that may occur during the massage services provided. I understand that while every effort will be made to ensure a safe and satisfactory experience, unforeseen circumstances may arise.",
     legal_p4: "I recognize that if I need to cancel or reschedule my appointment, I must provide 24 HS notice to avoid incurring a cancellation fee.",
-    legal_p5: "Furthermore, I grant permission for Between Curves Massage to take photographs for promotional use, including but not limited to social media and marketing materials. I understand my identity may be associated with these images unless I explicitly request otherwise.",
     legal_final_agreement: "I confirm that I have read and fully understand this consent form. I agree to the terms outlined herein and acknowledge my willingness to proceed with the massage therapy services as described.",
+    consent_acceptance: "I have read and agree to the massage consent and release above.",
+    photo_consent_description: "I authorize Between Curves Massage to take and use photographs or videos of me for promotional purposes, including social media and marketing materials. This permission is optional and does not affect my massage service.",
+    photo_consent_prompt: "Do you authorize the optional use of photographs or videos?",
+    consent_version: "Document version",
+    signed_at: "Signed on",
 
     label_client_signature: "Client Signature",
+    printed_name: "Printed name",
     label_date: "Date",
     clear_signature: "Clear Signature",
     submit_btn_loading: "Processing Form...",
     submit_btn: "Sign & Submit Form",
+    access_title: "Private consent form",
+    access_description: "This link is not valid. Please request the private consent link from Between Curves Massage.",
+    checking_access: "Checking access...",
+    download_copy: "Download my copy",
+    copy_ready: "Your form was saved securely. You may download a copy for your records.",
+    save_error: "The form could not be saved. Please try again or contact Between Curves Massage.",
 };
 
 // 2. Extraemos el TIPO exacto de ese objeto
@@ -97,6 +117,15 @@ const es: TranslationType = {
     medicalHistoryTitle: "HISTORIAL MÉDICO",
     massageInfoTitle: "INFORMACIÓN DEL MASAJE",
     consentTitle: "CONSENTIMIENTO Y EXONERACIÓN",
+    photoConsentTitle: "CONSENTIMIENTO OPCIONAL PARA FOTOS Y MEDIOS",
+    form_intro: "Un primer paso cuidadoso hacia una experiencia de masaje diseñada para usted.",
+    private_badge: "Formulario privado",
+    time_badge: "5–7 minutos",
+    personal_description: "Indíquenos cómo contactarle y a quién llamar en caso de emergencia.",
+    medical_description: "Comparta cualquier información que nos ayude a ofrecerle una sesión más segura y cómoda.",
+    massage_description: "Elija las áreas, técnicas y resultados que son más importantes para usted.",
+    consent_description: "Revise los términos, elija si autoriza contenido multimedia y firme abajo.",
+    signature_hint: "Use el dedo o el puntero para firmar dentro del recuadro.",
 
     label_name: "Nombre Completo:",
     label_dob: "Fecha de Nacimiento:",
@@ -154,14 +183,25 @@ const es: TranslationType = {
     legal_p2: "Reconozco que la terapia de masaje implica manipulación física que puede plantear ciertos riesgos, incluyendo dolor, moretones o reacciones alérgicas a aceites o lociones. Soy responsable de informar al terapeuta sobre cualquier condición médica, alergia o sensibilidad que pueda tener.",
     legal_p3: "Al firmar este formulario de consentimiento, libero a Between Curves Massage de cualquier responsabilidad por accidentes, lesiones o daños que puedan ocurrir durante los servicios de masaje proporcionados. Entiendo que, aunque se hará todo lo posible para garantizar una experiencia segura y satisfactoria, pueden surgir circunstancias imprevistas.",
     legal_p4: "Reconozco que si necesito cancelar o reprogramar mi cita, debo avisar con 24 horas de antelación para evitar incurrir en una tarifa de cancelación.",
-    legal_p5: "Además, otorgo permiso a Between Curves Massage para tomar fotografías para uso promocional, incluyendo, pero no limitado a, redes sociales y materiales de marketing. Entiendo que mi identidad puede estar asociada con estas imágenes a menos que solicite explícitamente lo contrario.",
     legal_final_agreement: "Confirmo que he leído y comprendido completamente este formulario de consentimiento. Acepto los términos descritos aquí y reconozco mi voluntad de proceder con los servicios de terapia de masaje según lo descrito.",
+    consent_acceptance: "He leído y acepto el consentimiento y la exoneración para el servicio de masaje descritos anteriormente.",
+    photo_consent_description: "Autorizo a Between Curves Massage a tomar y utilizar fotografías o videos míos con fines promocionales, incluyendo redes sociales y materiales de marketing. Este permiso es opcional y no afecta mi servicio de masaje.",
+    photo_consent_prompt: "¿Autoriza el uso opcional de fotografías o videos?",
+    consent_version: "Versión del documento",
+    signed_at: "Firmado el",
 
     label_client_signature: "Firma del Cliente",
+    printed_name: "Nombre en letra de molde",
     label_date: "Fecha",
     clear_signature: "Borrar Firma",
     submit_btn_loading: "Procesando Formulario...",
     submit_btn: "Firmar y Enviar Formulario",
+    access_title: "Formulario privado de consentimiento",
+    access_description: "Este enlace no es válido. Solicite a Between Curves Massage el enlace privado del consentimiento.",
+    checking_access: "Verificando acceso...",
+    download_copy: "Descargar mi copia",
+    copy_ready: "El formulario se guardó correctamente. Puede descargar una copia para sus registros.",
+    save_error: "No se pudo guardar el formulario. Inténtelo nuevamente o comuníquese con Between Curves Massage.",
 };
 
 export const translations = { en, es };
@@ -179,3 +219,18 @@ export const conditionNamesMap: Record<string, string> = {
     shingles: "Shingles", skin_diseases: "Skin diseases", thyroid_imbalance: "Thyroid imbalance",
     vitiligo: "Vitiligo", warts: "Warts"
 };
+
+const conditionNamesMapEs: Record<string, string> = {
+    acne: "Acné", active_infection: "Infección activa", asthma: "Asma", autoimmune_disease: "Enfermedad autoinmune",
+    bleeding_disorder: "Trastorno hemorrágico", breathing_problems: "Problemas respiratorios", diabetes: "Diabetes",
+    easily_bruised: "Moretones con facilidad", eczema: "Eccema", epilepsy: "Epilepsia", heart_disease: "Enfermedad cardíaca",
+    herpes: "Herpes", hepatitis: "Hepatitis", hirsutism: "Hirsutismo", hiv_aids: "VIH/SIDA",
+    hyperpigmentation: "Hiperpigmentación", hypopigmentation: "Hipopigmentación", hysterectomy: "Histerectomía",
+    irregular_periods: "Períodos irregulares", keloid_scarring: "Cicatrización queloide", low_blood_pressure: "Presión arterial baja",
+    high_blood_pressure: "Presión arterial alta", lupus: "Lupus", menopause: "Menopausia",
+    polycystic_ovaries: "Ovarios poliquísticos", psoriasis: "Psoriasis", pregnant_breastfeeding: "Embarazo/lactancia",
+    shingles: "Herpes zóster", skin_diseases: "Enfermedades de la piel", thyroid_imbalance: "Desequilibrio tiroideo",
+    vitiligo: "Vitíligo", warts: "Verrugas"
+};
+
+export const conditionNamesMaps = { en: conditionNamesMap, es: conditionNamesMapEs };
