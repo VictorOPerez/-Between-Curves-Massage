@@ -9,10 +9,10 @@ export async function GET(req: NextRequest) {
     const token = req.nextUrl.searchParams.get("token") || "";
 
     if (!consentAuthIsConfigured() || token.length > 128 || !verifyConsentLinkToken(token)) {
-        return NextResponse.redirect(new URL("/consent?invalid=1", req.url));
+        return new NextResponse(null, { status: 307, headers: { Location: "/consent?invalid=1" } });
     }
 
-    const response = NextResponse.redirect(new URL("/consent", req.url));
+    const response = new NextResponse(null, { status: 307, headers: { Location: "/consent" } });
     setConsentSessionCookie(response);
     return response;
 }
