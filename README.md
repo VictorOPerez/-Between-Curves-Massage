@@ -53,6 +53,12 @@ node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
 
 The first command produces the private token and `CONSENT_LINK_TOKEN_HASH`; the second produces `CONSENT_SESSION_SECRET`. Share `/consent/open?token=TOKEN` with clients. The server validates it, creates the secure session, and immediately redirects to the clean `/consent` URL. After changing either environment value, redeploy the application. Existing consent sessions expire after eight hours and become invalid immediately if the session secret changes.
 
+### Client preview (September 2026)
+
+The `preview/consent-redesign` branch is deployed publicly on Railway at `https://web-production-dbb21.up.railway.app`. The client entry point is `https://web-production-dbb21.up.railway.app/consent/open?token=TOKEN`, where `TOKEN` is the private token corresponding to the deployed `CONSENT_LINK_TOKEN_HASH`. The complete private URL was shared in the project conversation; do not commit the token or complete URL to this repository. The Vercel branch preview requires Vercel sign-in and is not suitable to send to clients.
+
+The link is a reusable bearer link: anyone who receives the complete URL can open the form, even if it is forwarded. It is not tied to an individual client and has no one-use or link-expiration rule. Opening it creates an eight-hour browser session. To revoke the link, rotate `CONSENT_LINK_TOKEN_HASH` and redeploy. Commit `1a03a09` fixes the Railway redirect so successful access stays on the public domain. The live link was checked to redirect to `/consent`, and `/api/consent/access` returned `authorized: true` with its session cookie.
+
 ## Google Drive consent storage
 
 Signed massage and aesthetics PDFs are generated in the browser and sent to the protected `/api/upload` backend. The backend validates the session and PDF, creates a server-controlled file name and uploads it to the configured private Drive folder.
